@@ -1,0 +1,594 @@
+// ─────────────────────────────────────────────────────────────
+//  TooFan Platform — Prisma Schema
+//  Database: PostgreSQL
+//  Run:  npx prisma migrate dev --name init
+//        npx prisma generate
+// ─────────────────────────────────────────────────────────────
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ── ENUMS ─────────────────────────────────────────────────────
+
+enum UserRole {
+  CUSTOMER
+  DRIVER
+  RESTAURANT_OWNER
+  PARTNER_ADMIN
+  SUPER_ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PREPARING
+  READY_FOR_PICKUP
+  PICKED_UP
+  ON_THE_WAY
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+enum DriverStatus {
+  PENDING_APPROVAL
+  APPROVED
+  ONLINE
+  OFFLINE
+  ON_DELIVERY
+  SUSPENDED
+}
+
+enum PaymentMethod {
+  CASH
+  ESEWA
+  KHALTI
+  STRIPE
+  WALLET
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum PartnerPlan {
+  STARTER
+  GROWTH
+  ENTERPRISE
+}
+
+enum PartnerStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+  CANCELLED
+}
+
+enum VehicleType {
+  MOTORCYCLE
+  SCOOTER
+  BICYCLE
+  CAR
+}
+
+enum NotificationType {
+  ORDER_CONFIRMED
+  ORDER_PREPARING
+  DRIVER_ASSIGNED
+  ORDER_PICKED_UP
+  ORDER_DELIVERED
+  ORDER_CANCELLED
+  PAYMENT_SUCCESS
+  PROMO_OFFER
+  SYSTEM
+}
+
+// ── USERS ─────────────────────────────────────────────────────
+
+model User {
+  id              String    @id @default(uuid())
+  name            String
+  email           String    @unique
+  phone           String    @unique
+  passwordHash    String
+  role            UserRole  @default(CUSTOMER)
+  isVerified      Boolean   @default(false)
+  isActive        Boolean   @default(true)
+  avatarUrl       String?
+  fcmToken        String?   // Firebase push notification token
+  refreshToken    String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  // Relations
+  customer        Customer?
+  driver          Driver?
+  restaurantOwner RestaurantOwner?
+  partnerAdmin    PartnerAdmin?
+  notifications   Notification[]
+  otpCodes        OtpCode[]
+
+  @@map("users")
+}
+
+model OtpCode {
+  id        String   @id @default(uuid())
+  userId    String
+  code      String
+  purpose   String   // "verify_phone" | "reset_password" | "login"
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@map("otp_codes")
+}
+
+// ── CUSTOMER ──────────────────────────────────────────────────
+
+model Customer {
+  id              String    @id @default(uuid())
+  userId          String    @unique
+  walletBalance   Float     @default(0)
+  coins           Int       @default(0)
+  referralCode    String    @unique @default(cuid())
+  referredBy      String?
+  totalOrders     Int       @default(0)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  user            User      @relation(fields: [userId], references: [id])
+  addresses       Address[]
+  orders          Order[]
+  favourites      Favourite[]
+  cartItems       CartItem[]
+  walletTxns      WalletTransaction[]
+
+  @@map("customers")
+}
+
+model Address {
+  id          String   @id @default(uuid())
+  customerId  String
+  label       String   // "Home" | "Work" | "Other"
+  line1       String
+  city        String
+  lat         Float
+  lng         Float
+  isDefault   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  customer    Customer @relation(fields: [customerId], references: [id])
+  orders      Order[]
+
+  @@map("addresses")
+}
+
+model Favourite {
+  id           String     @id @default(uuid())
+  customerId   String
+  restaurantId String
+  createdAt    DateTime   @default(now())
+
+  customer     Customer   @relation(fields: [customerId], references: [id])
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+
+  @@unique([customerId, restaurantId])
+  @@map("favourites")
+}
+
+model WalletTransaction {
+  id          String   @id @default(uuid())
+  customerId  String
+  amount      Float
+  type        String   // "credit" | "debit"
+  description String
+  reference   String?
+  createdAt   DateTime @default(now())
+
+  customer    Customer @relation(fields: [customerId], references: [id])
+
+  @@map("wallet_transactions")
+}
+
+// ── DRIVER ────────────────────────────────────────────────────
+
+model Driver {
+  id              String       @id @default(uuid())
+  userId          String       @unique
+  status          DriverStatus @default(PENDING_APPROVAL)
+  vehicleType     VehicleType
+  vehicleNumber   String
+  vehicleName     String?      // e.g. "Honda CB Shine"
+  licenseNumber   String
+  licenseExpiry   DateTime
+  citizenshipNo   String
+  avatarUrl       String?
+  currentLat      Float?
+  currentLng      Float?
+  lastLocationAt  DateTime?
+  isOnline        Boolean      @default(false)
+  rating          Float        @default(0)
+  totalRatings    Int          @default(0)
+  totalTrips      Int          @default(0)
+  totalEarnings   Float        @default(0)
+  todayEarnings   Float        @default(0)
+  partnerId       String?      // if belongs to a franchise partner
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  user            User         @relation(fields: [userId], references: [id])
+  partner         Partner?     @relation(fields: [partnerId], references: [id])
+  orders          Order[]
+  trips           DriverTrip[]
+  earnings        DriverEarning[]
+  incentives      DriverIncentive[]
+
+  @@map("drivers")
+}
+
+model DriverTrip {
+  id           String   @id @default(uuid())
+  driverId     String
+  orderId      String   @unique
+  distanceKm   Float
+  durationMin  Int
+  earnings     Float
+  bonusEarned  Float    @default(0)
+  rating       Float?
+  completedAt  DateTime @default(now())
+
+  driver       Driver   @relation(fields: [driverId], references: [id])
+  order        Order    @relation(fields: [orderId], references: [id])
+
+  @@map("driver_trips")
+}
+
+model DriverEarning {
+  id          String   @id @default(uuid())
+  driverId    String
+  amount      Float
+  type        String   // "base" | "bonus" | "incentive" | "tip"
+  description String
+  orderId     String?
+  date        DateTime @default(now())
+
+  driver      Driver   @relation(fields: [driverId], references: [id])
+
+  @@map("driver_earnings")
+}
+
+model DriverIncentive {
+  id          String   @id @default(uuid())
+  driverId    String
+  type        String   // "rain_bonus" | "rush_hour" | "streak" | "weekly_target"
+  amount      Float
+  description String
+  earnedAt    DateTime @default(now())
+
+  driver      Driver   @relation(fields: [driverId], references: [id])
+
+  @@map("driver_incentives")
+}
+
+// ── RESTAURANT ────────────────────────────────────────────────
+
+model RestaurantOwner {
+  id          String      @id @default(uuid())
+  userId      String      @unique
+  createdAt   DateTime    @default(now())
+
+  user        User        @relation(fields: [userId], references: [id])
+  restaurants Restaurant[]
+
+  @@map("restaurant_owners")
+}
+
+model Restaurant {
+  id           String   @id @default(uuid())
+  ownerId      String
+  partnerId    String?
+  name         String
+  description  String?
+  cuisineType  String
+  imageUrl     String?
+  address      String
+  city         String
+  lat          Float
+  lng          Float
+  phone        String
+  email        String?
+  openingTime  String   @default("08:00")
+  closingTime  String   @default("22:00")
+  isActive     Boolean  @default(true)
+  isVerified   Boolean  @default(false)
+  rating       Float    @default(0)
+  totalRatings Int      @default(0)
+  totalOrders  Int      @default(0)
+  discountPct  Int      @default(0)
+  prepTimeMin  Int      @default(20)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  owner        RestaurantOwner @relation(fields: [ownerId], references: [id])
+  partner      Partner?        @relation(fields: [partnerId], references: [id])
+  menuCategories MenuCategory[]
+  orders       Order[]
+  favourites   Favourite[]
+
+  @@map("restaurants")
+}
+
+model MenuCategory {
+  id           String     @id @default(uuid())
+  restaurantId String
+  name         String
+  sortOrder    Int        @default(0)
+  isActive     Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  items        MenuItem[]
+
+  @@map("menu_categories")
+}
+
+model MenuItem {
+  id           String       @id @default(uuid())
+  categoryId   String
+  name         String
+  description  String?
+  price        Float
+  imageUrl     String?
+  isVeg        Boolean      @default(false)
+  isAvailable  Boolean      @default(true)
+  calories     Int?
+  sortOrder    Int          @default(0)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  category     MenuCategory @relation(fields: [categoryId], references: [id])
+  cartItems    CartItem[]
+  orderItems   OrderItem[]
+
+  @@map("menu_items")
+}
+
+model CartItem {
+  id         String   @id @default(uuid())
+  customerId String
+  itemId     String
+  quantity   Int      @default(1)
+  addedAt    DateTime @default(now())
+
+  customer   Customer @relation(fields: [customerId], references: [id])
+  item       MenuItem @relation(fields: [itemId], references: [id])
+
+  @@unique([customerId, itemId])
+  @@map("cart_items")
+}
+
+// ── ORDERS ────────────────────────────────────────────────────
+
+model Order {
+  id              String        @id @default(uuid())
+  orderNumber     String        @unique @default(cuid())
+  customerId      String
+  restaurantId    String
+  driverId        String?
+  addressId       String?
+  status          OrderStatus   @default(PENDING)
+  subtotal        Float
+  deliveryFee     Float         @default(50)
+  platformFee     Float         @default(20)
+  discountAmount  Float         @default(0)
+  couponCode      String?
+  total           Float
+  paymentMethod   PaymentMethod @default(CASH)
+  paymentStatus   PaymentStatus @default(PENDING)
+  paymentRef      String?
+  scheduledFor    DateTime?
+  specialNote     String?
+  deliveryLat     Float?
+  deliveryLng     Float?
+  confirmedAt     DateTime?
+  preparedAt      DateTime?
+  pickedUpAt      DateTime?
+  deliveredAt     DateTime?
+  cancelledAt     DateTime?
+  cancelReason    String?
+  rating          Float?
+  review          String?
+  driverRating    Float?
+  coinsEarned     Int           @default(0)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  customer        Customer      @relation(fields: [customerId], references: [id])
+  restaurant      Restaurant    @relation(fields: [restaurantId], references: [id])
+  driver          Driver?       @relation(fields: [driverId], references: [id])
+  address         Address?      @relation(fields: [addressId], references: [id])
+  items           OrderItem[]
+  statusHistory   OrderStatusHistory[]
+  payment         Payment?
+  driverTrip      DriverTrip?
+  chatMessages    ChatMessage[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String   @id @default(uuid())
+  orderId   String
+  itemId    String
+  name      String   // snapshot at time of order
+  price     Float    // snapshot
+  quantity  Int
+  subtotal  Float
+
+  order     Order    @relation(fields: [orderId], references: [id])
+  item      MenuItem @relation(fields: [itemId], references: [id])
+
+  @@map("order_items")
+}
+
+model OrderStatusHistory {
+  id        String      @id @default(uuid())
+  orderId   String
+  status    OrderStatus
+  note      String?
+  createdAt DateTime    @default(now())
+
+  order     Order       @relation(fields: [orderId], references: [id])
+
+  @@map("order_status_history")
+}
+
+// ── CHAT ──────────────────────────────────────────────────────
+
+model ChatMessage {
+  id        String   @id @default(uuid())
+  orderId   String
+  senderId  String
+  senderRole String  // "customer" | "driver"
+  message   String
+  createdAt DateTime @default(now())
+
+  order     Order    @relation(fields: [orderId], references: [id])
+
+  @@map("chat_messages")
+}
+
+// ── PAYMENTS ─────────────────────────────────────────────────
+
+model Payment {
+  id              String        @id @default(uuid())
+  orderId         String        @unique
+  method          PaymentMethod
+  status          PaymentStatus @default(PENDING)
+  amount          Float
+  currency        String        @default("NPR")
+  gatewayRef      String?       // eSewa/Khalti transaction ID
+  gatewayResponse Json?
+  paidAt          DateTime?
+  createdAt       DateTime      @default(now())
+
+  order           Order         @relation(fields: [orderId], references: [id])
+
+  @@map("payments")
+}
+
+// ── COUPONS ──────────────────────────────────────────────────
+
+model Coupon {
+  id              String   @id @default(uuid())
+  code            String   @unique
+  description     String
+  type            String   // "pct" | "flat"
+  value           Float
+  maxDiscount     Float?
+  minOrderAmount  Float    @default(0)
+  usageLimit      Int      @default(100)
+  usageCount      Int      @default(0)
+  isActive        Boolean  @default(true)
+  expiresAt       DateTime?
+  createdAt       DateTime @default(now())
+
+  @@map("coupons")
+}
+
+// ── BUSINESS PARTNERS ─────────────────────────────────────────
+
+model Partner {
+  id            String        @id @default(uuid())
+  name          String
+  type          String        // "restaurant" | "fleet" | "franchise" | "hybrid"
+  plan          PartnerPlan   @default(STARTER)
+  status        PartnerStatus @default(PENDING)
+  city          String
+  email         String        @unique
+  phone         String
+  brandColor    String?
+  logoUrl       String?
+  description   String?
+  outlets       Int           @default(1)
+  trialEndsAt   DateTime?
+  planRenewsAt  DateTime?
+  autoApproved  Boolean       @default(false)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  admins        PartnerAdmin[]
+  restaurants   Restaurant[]
+  drivers       Driver[]
+
+  @@map("partners")
+}
+
+model PartnerAdmin {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  partnerId String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id])
+  partner   Partner  @relation(fields: [partnerId], references: [id])
+
+  @@map("partner_admins")
+}
+
+// ── NOTIFICATIONS ─────────────────────────────────────────────
+
+model Notification {
+  id        String           @id @default(uuid())
+  userId    String
+  type      NotificationType
+  title     String
+  body      String
+  data      Json?
+  isRead    Boolean          @default(false)
+  sentAt    DateTime         @default(now())
+
+  user      User             @relation(fields: [userId], references: [id])
+
+  @@map("notifications")
+}
+
+// ── SURGE ZONES ───────────────────────────────────────────────
+
+model SurgeZone {
+  id          String   @id @default(uuid())
+  name        String
+  city        String
+  lat         Float
+  lng         Float
+  radiusKm    Float    @default(1.5)
+  multiplier  Float    @default(1.0)
+  isActive    Boolean  @default(false)
+  updatedAt   DateTime @updatedAt
+
+  @@map("surge_zones")
+}
+
+// ── PLATFORM CONFIG ───────────────────────────────────────────
+
+model AppConfig {
+  id            String   @id @default(uuid())
+  app           String   // "khana" | "driver" | "business"
+  key           String
+  value         String
+  updatedAt     DateTime @updatedAt
+
+  @@unique([app, key])
+  @@map("app_config")
+}

@@ -1,0 +1,44 @@
+{
+  "name": "toofan-backend",
+  "version": "1.0.0",
+  "description": "TooFan Platform — Backend API for Khana, Driver & Business apps (Bodh Software Co.)",
+  "main": "src/index.js",
+  "scripts": {
+    "start":       "node src/index.js",
+    "dev":         "nodemon src/index.js",
+    "db:migrate":  "npx prisma migrate dev",
+    "db:seed":     "node prisma/seed.js",
+    "db:studio":   "npx prisma studio",
+    "db:generate": "npx prisma generate",
+    "test":        "jest --watchAll=false"
+  },
+  "dependencies": {
+    "@prisma/client":       "^5.10.0",
+    "bcryptjs":             "^2.4.3",
+    "cors":                 "^2.8.5",
+    "dotenv":               "^16.4.1",
+    "express":              "^4.18.2",
+    "express-rate-limit":   "^7.2.0",
+    "express-validator":    "^7.0.1",
+    "firebase-admin":       "^12.0.0",
+    "helmet":               "^7.1.0",
+    "jsonwebtoken":         "^9.0.2",
+    "morgan":               "^1.10.0",
+    "multer":               "^1.4.5-lts.1",
+    "node-cron":            "^3.0.3",
+    "socket.io":            "^4.7.4",
+    "stripe":               "^14.17.0",
+    "uuid":                 "^9.0.1",
+    "winston":              "^3.11.0",
+    "zod":                  "^3.22.4"
+  },
+  "devDependencies": {
+    "jest":        "^29.7.0",
+    "nodemon":     "^3.1.0",
+    "prisma":      "^5.10.0",
+    "supertest":   "^6.3.4"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir \"c:\\\\projects\\\\delivery app\")",
+      "Bash(tail -30 \"c:/projects/delivery app/toofan-app \\(4\\).jsx\")",
+      "Bash(unzip -l toofan-backend.zip)",
+      "Bash(find 'c:/projects/delivery app/toofan-backend' -name *.env* -o -name .env*)"
+    ]
+  }
+}
