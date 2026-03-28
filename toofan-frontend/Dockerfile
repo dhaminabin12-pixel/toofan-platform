@@ -10,7 +10,7 @@ COPY package*.json ./
 RUN npm ci
 
 COPY . .
-RUN npx vite build
+RUN node node_modules/vite/bin/vite.js build
 
 # Stage 2: Serve with nginx
 FROM nginx:alpine
