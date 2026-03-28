@@ -1,4 +1,4 @@
 .env
 *.pem
-*.json
+*firebase*adminsdk*.json
 node_modules
