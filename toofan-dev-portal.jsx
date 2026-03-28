@@ -448,6 +448,36 @@ const css = `
   }
   @keyframes toastIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
 
+  /* ── MODAL ── */
+  .modal-overlay {
+    position:fixed; inset:0; z-index:1000;
+    background:rgba(0,0,0,0.75); backdrop-filter:blur(4px);
+    display:flex; align-items:center; justify-content:center; padding:20px;
+  }
+  .modal {
+    background:var(--surface); border:1px solid var(--border2);
+    border-radius:16px; padding:24px; width:100%; max-width:480px;
+    max-height:88vh; overflow-y:auto;
+  }
+  .modal-header {
+    display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;
+  }
+  .modal-title { font-size:1rem; font-weight:700; }
+  .modal-close {
+    background:var(--surface2); border:1px solid var(--border);
+    border-radius:6px; width:28px; height:28px; cursor:pointer;
+    color:var(--muted); font-size:1rem; display:flex; align-items:center; justify-content:center;
+    font-family:monospace;
+  }
+  .modal-close:hover { color:var(--text); border-color:var(--border2); }
+  .modal-footer { display:flex; gap:8px; justify-content:flex-end; margin-top:20px; }
+  .form-select {
+    width:100%; padding:9px 12px; background:var(--surface2); border:1px solid var(--border);
+    border-radius:8px; font-family:'JetBrains Mono',monospace; font-size:0.82rem; color:var(--text);
+    outline:none; transition:border-color 0.15s; appearance:none; cursor:pointer;
+  }
+  .form-select:focus { border-color:var(--brand); }
+
   /* ── ANIMATIONS ── */
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
   .live-dot { display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--green); box-shadow:0 0 6px var(--green); animation:pulse 2s infinite; }
@@ -795,13 +825,37 @@ function PageAppConfig({ appKey, config, setConfig, toast }) {
   );
 }
 
+const BLANK_REST = { name:"", cuisine:"Nepali", city:"Kathmandu", time:"20-30", img:"🍽️", rating:4.5, active:true };
+const CUISINES = ["Nepali","Traditional","Indian","Cafe","Fast Food","Mughlai","Chinese","Continental"];
+const CITIES   = ["Kathmandu","Lalitpur","Bhaktapur","Pokhara","Patan","Biratnagar","Butwal"];
+
 // ── PAGE: RESTAURANTS ────────────────────────────────────
 function PageRestaurants({ toast }) {
   const [rests, setRests] = useState(INITIAL_RESTAURANTS);
+  const [modal, setModal] = useState(null); // null | { mode:"add"|"edit", data:{} }
+
+  const openAdd  = () => setModal({ mode:"add",  data:{...BLANK_REST} });
+  const openEdit = (r) => setModal({ mode:"edit", data:{...r} });
+  const closeModal = () => setModal(null);
+
+  const setField = (k, v) => setModal(m => ({...m, data:{...m.data, [k]:v}}));
+
+  const save = () => {
+    if (!modal.data.name.trim()) return;
+    if (modal.mode === "add") {
+      const joined = new Date().toLocaleString("en-US",{month:"short",year:"numeric"});
+      setRests(r => [...r, {...modal.data, id: Date.now(), joined }]);
+      toast(`${modal.data.name} added`);
+    } else {
+      setRests(r => r.map(x => x.id===modal.data.id ? modal.data : x));
+      toast(`${modal.data.name} updated`);
+    }
+    closeModal();
+  };
 
   const toggle = (id) => {
-    setRests(r => r.map(x => x.id===id ? {...x,active:!x.active} : x));
     const r = rests.find(x=>x.id===id);
+    setRests(rs => rs.map(x => x.id===id ? {...x,active:!x.active} : x));
     toast(`${r.name} ${r.active?"deactivated":"activated"}`);
   };
 
@@ -812,7 +866,7 @@ function PageRestaurants({ toast }) {
           <div className="page-title">🍱 Restaurants</div>
           <div className="page-sub">Manage all partner restaurants on TooFan Khana.</div>
         </div>
-        <button className="btn btn-primary">+ Add Restaurant</button>
+        <button className="btn btn-primary" onClick={openAdd}>+ Add Restaurant</button>
       </div>
       <div className="card">
         <div className="table-wrap">
@@ -839,7 +893,7 @@ function PageRestaurants({ toast }) {
                       <button className={`btn btn-sm ${r.active?"btn-red":"btn-green"}`} onClick={()=>toggle(r.id)}>
                         {r.active?"Pause":"Activate"}
                       </button>
-                      <button className="btn btn-ghost btn-sm">Edit</button>
+                      <button className="btn btn-ghost btn-sm" onClick={()=>openEdit(r)}>Edit</button>
                     </div>
                   </td>
                 </tr>
@@ -848,13 +902,84 @@ function PageRestaurants({ toast }) {
           </table>
         </div>
       </div>
+
+      {modal && (
+        <div className="modal-overlay" onClick={closeModal}>
+          <div className="modal" onClick={e=>e.stopPropagation()}>
+            <div className="modal-header">
+              <div className="modal-title">{modal.mode==="add"?"➕ Add Restaurant":"✏️ Edit Restaurant"}</div>
+              <button className="modal-close" onClick={closeModal}>✕</button>
+            </div>
+            <div className="form-group">
+              <label className="form-label">Name</label>
+              <input className="form-input" value={modal.data.name} onChange={e=>setField("name",e.target.value)} placeholder="Restaurant name" />
+            </div>
+            <div className="form-row">
+              <div className="form-group">
+                <label className="form-label">Cuisine</label>
+                <select className="form-select" value={modal.data.cuisine} onChange={e=>setField("cuisine",e.target.value)}>
+                  {CUISINES.map(c=><option key={c}>{c}</option>)}
+                </select>
+              </div>
+              <div className="form-group">
+                <label className="form-label">City</label>
+                <select className="form-select" value={modal.data.city} onChange={e=>setField("city",e.target.value)}>
+                  {CITIES.map(c=><option key={c}>{c}</option>)}
+                </select>
+              </div>
+            </div>
+            <div className="form-row">
+              <div className="form-group">
+                <label className="form-label">Delivery Time</label>
+                <input className="form-input" value={modal.data.time} onChange={e=>setField("time",e.target.value)} placeholder="20-30" />
+                <div className="form-hint">// e.g. 20-30</div>
+              </div>
+              <div className="form-group">
+                <label className="form-label">Rating</label>
+                <input className="form-input" type="number" step="0.1" min="1" max="5" value={modal.data.rating} onChange={e=>setField("rating",parseFloat(e.target.value))} />
+              </div>
+            </div>
+            <div className="form-group">
+              <label className="form-label">Icon (emoji)</label>
+              <input className="form-input" value={modal.data.img} onChange={e=>setField("img",e.target.value)} placeholder="🍽️" />
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-ghost" onClick={closeModal}>Cancel</button>
+              <button className="btn btn-primary" onClick={save}>
+                {modal.mode==="add"?"Add Restaurant":"Save Changes"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
+const BLANK_DRIVER = { name:"", phone:"", city:"Kathmandu", status:"Pending", trips:0, rating:0, approved:false };
+
 // ── PAGE: DRIVERS ────────────────────────────────────────
 function PageDrivers({ toast }) {
   const [drivers, setDrivers] = useState(INITIAL_DRIVERS);
+  const [modal, setModal] = useState(null); // null | { mode:"add"|"edit", data:{} }
+
+  const openAdd  = () => setModal({ mode:"add",  data:{...BLANK_DRIVER, id:`D${String(Date.now()).slice(-2)}`} });
+  const openEdit = (d) => setModal({ mode:"edit", data:{...d} });
+  const closeModal = () => setModal(null);
+
+  const setField = (k, v) => setModal(m => ({...m, data:{...m.data, [k]:v}}));
+
+  const save = () => {
+    if (!modal.data.name.trim() || !modal.data.phone.trim()) return;
+    if (modal.mode === "add") {
+      setDrivers(d => [...d, modal.data]);
+      toast(`${modal.data.name} added — pending approval`);
+    } else {
+      setDrivers(d => d.map(x => x.id===modal.data.id ? modal.data : x));
+      toast(`${modal.data.name} updated`);
+    }
+    closeModal();
+  };
 
   const approve = (id) => {
     setDrivers(d => d.map(x => x.id===id ? {...x,approved:true,status:"Active"} : x));
@@ -872,7 +997,7 @@ function PageDrivers({ toast }) {
           <div className="page-title">🛵 Drivers</div>
           <div className="page-sub">Approve, manage, and monitor all TooFan drivers.</div>
         </div>
-        <button className="btn btn-primary">+ Add Driver</button>
+        <button className="btn btn-primary" onClick={openAdd}>+ Add Driver</button>
       </div>
 
       {drivers.filter(d=>!d.approved).length > 0 && (
@@ -902,7 +1027,7 @@ function PageDrivers({ toast }) {
                   <td>
                     <div style={{display:"flex",gap:6}}>
                       {!d.approved && <button className="btn btn-green btn-sm" onClick={()=>approve(d.id)}>✓ Approve</button>}
-                      <button className="btn btn-ghost btn-sm">Edit</button>
+                      <button className="btn btn-ghost btn-sm" onClick={()=>openEdit(d)}>Edit</button>
                       <button className="btn btn-red btn-sm" onClick={()=>remove(d.id)}>Remove</button>
                     </div>
                   </td>
@@ -912,13 +1037,85 @@ function PageDrivers({ toast }) {
           </table>
         </div>
       </div>
+
+      {modal && (
+        <div className="modal-overlay" onClick={closeModal}>
+          <div className="modal" onClick={e=>e.stopPropagation()}>
+            <div className="modal-header">
+              <div className="modal-title">{modal.mode==="add"?"➕ Add Driver":"✏️ Edit Driver"}</div>
+              <button className="modal-close" onClick={closeModal}>✕</button>
+            </div>
+            <div className="form-group">
+              <label className="form-label">Full Name</label>
+              <input className="form-input" value={modal.data.name} onChange={e=>setField("name",e.target.value)} placeholder="Driver full name" />
+            </div>
+            <div className="form-row">
+              <div className="form-group">
+                <label className="form-label">Phone</label>
+                <input className="form-input" value={modal.data.phone} onChange={e=>setField("phone",e.target.value)} placeholder="98XXXXXXXX" />
+              </div>
+              <div className="form-group">
+                <label className="form-label">City</label>
+                <select className="form-select" value={modal.data.city} onChange={e=>setField("city",e.target.value)}>
+                  {CITIES.map(c=><option key={c}>{c}</option>)}
+                </select>
+              </div>
+            </div>
+            {modal.mode==="edit" && (
+              <div className="form-row">
+                <div className="form-group">
+                  <label className="form-label">Status</label>
+                  <select className="form-select" value={modal.data.status} onChange={e=>setField("status",e.target.value)}>
+                    {["Active","Offline","Pending"].map(s=><option key={s}>{s}</option>)}
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Rating</label>
+                  <input className="form-input" type="number" step="0.1" min="0" max="5" value={modal.data.rating} onChange={e=>setField("rating",parseFloat(e.target.value)||0)} />
+                </div>
+              </div>
+            )}
+            <div className="modal-footer">
+              <button className="btn btn-ghost" onClick={closeModal}>Cancel</button>
+              <button className="btn btn-primary" onClick={save}>
+                {modal.mode==="add"?"Add Driver":"Save Changes"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
+const BLANK_PARTNER = { name:"", type:"Franchise", plan:"Starter", city:"Kathmandu", outlets:1, status:"Pending" };
+const PARTNER_TYPES = ["Franchise","Fleet","Restaurant","Cloud Kitchen"];
+const PARTNER_PLANS = ["Starter","Growth","Enterprise"];
+
 // ── PAGE: PARTNERS ────────────────────────────────────────
 function PagePartners({ toast }) {
   const [partners, setPartners] = useState(INITIAL_PARTNERS);
+  const [modal, setModal] = useState(null); // null | { mode:"invite"|"view", data:{} }
+
+  const openInvite = () => setModal({ mode:"invite", data:{...BLANK_PARTNER, id:`P${String(Date.now()).slice(-2)}`} });
+  const openView   = (p) => setModal({ mode:"view",   data:{...p} });
+  const closeModal = () => setModal(null);
+
+  const setField = (k, v) => setModal(m => ({...m, data:{...m.data, [k]:v}}));
+
+  const sendInvite = () => {
+    if (!modal.data.name.trim()) return;
+    const joined = new Date().toLocaleString("en-US",{month:"short",year:"numeric"});
+    setPartners(p => [...p, {...modal.data, joined}]);
+    toast(`Invite sent to ${modal.data.name}`);
+    closeModal();
+  };
+
+  const saveView = () => {
+    setPartners(p => p.map(x => x.id===modal.data.id ? modal.data : x));
+    toast(`${modal.data.name} updated`);
+    closeModal();
+  };
 
   const approve = (id) => {
     setPartners(p => p.map(x => x.id===id ? {...x,status:"Active"} : x));
@@ -932,7 +1129,7 @@ function PagePartners({ toast }) {
           <div className="page-title">🏪 Business Partners</div>
           <div className="page-sub">Manage all franchise and fleet partners on the Business Portal.</div>
         </div>
-        <button className="btn btn-primary">+ Invite Partner</button>
+        <button className="btn btn-primary" onClick={openInvite}>+ Invite Partner</button>
       </div>
 
       {partners.filter(p=>p.status==="Pending").length > 0 && (
@@ -961,7 +1158,7 @@ function PagePartners({ toast }) {
                   <td>
                     <div style={{display:"flex",gap:6}}>
                       {p.status==="Pending" && <button className="btn btn-green btn-sm" onClick={()=>approve(p.id)}>✓ Approve</button>}
-                      <button className="btn btn-ghost btn-sm">View</button>
+                      <button className="btn btn-ghost btn-sm" onClick={()=>openView(p)}>View</button>
                     </div>
                   </td>
                 </tr>
@@ -970,6 +1167,61 @@ function PagePartners({ toast }) {
           </table>
         </div>
       </div>
+
+      {modal && (
+        <div className="modal-overlay" onClick={closeModal}>
+          <div className="modal" onClick={e=>e.stopPropagation()}>
+            <div className="modal-header">
+              <div className="modal-title">{modal.mode==="invite"?"📨 Invite Partner":"🏪 Partner Details"}</div>
+              <button className="modal-close" onClick={closeModal}>✕</button>
+            </div>
+            <div className="form-group">
+              <label className="form-label">Business Name</label>
+              <input className="form-input" value={modal.data.name} onChange={e=>setField("name",e.target.value)} placeholder="Business name" readOnly={modal.mode==="view"&&modal.data.status==="Active"} />
+            </div>
+            <div className="form-row">
+              <div className="form-group">
+                <label className="form-label">Type</label>
+                <select className="form-select" value={modal.data.type} onChange={e=>setField("type",e.target.value)}>
+                  {PARTNER_TYPES.map(t=><option key={t}>{t}</option>)}
+                </select>
+              </div>
+              <div className="form-group">
+                <label className="form-label">Plan</label>
+                <select className="form-select" value={modal.data.plan} onChange={e=>setField("plan",e.target.value)}>
+                  {PARTNER_PLANS.map(p=><option key={p}>{p}</option>)}
+                </select>
+              </div>
+            </div>
+            <div className="form-row">
+              <div className="form-group">
+                <label className="form-label">City</label>
+                <select className="form-select" value={modal.data.city} onChange={e=>setField("city",e.target.value)}>
+                  {CITIES.map(c=><option key={c}>{c}</option>)}
+                </select>
+              </div>
+              <div className="form-group">
+                <label className="form-label">Outlets</label>
+                <input className="form-input" type="number" min="1" value={modal.data.outlets} onChange={e=>setField("outlets",+e.target.value)} />
+              </div>
+            </div>
+            {modal.mode==="view" && (
+              <div className="form-group">
+                <label className="form-label">Status</label>
+                <select className="form-select" value={modal.data.status} onChange={e=>setField("status",e.target.value)}>
+                  {["Active","Pending","Suspended"].map(s=><option key={s}>{s}</option>)}
+                </select>
+              </div>
+            )}
+            <div className="modal-footer">
+              <button className="btn btn-ghost" onClick={closeModal}>Cancel</button>
+              <button className="btn btn-primary" onClick={modal.mode==="invite"?sendInvite:saveView}>
+                {modal.mode==="invite"?"Send Invite":"Save Changes"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
