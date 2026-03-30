@@ -3,6 +3,9 @@
 # ─────────────────────────────────────────────
 FROM node:18-alpine AS base
 
+# Install OpenSSL — required by Prisma on Alpine
+RUN apk add --no-cache openssl
+
 WORKDIR /app
 
 # Install dependencies only
