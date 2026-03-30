@@ -15,7 +15,7 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
     permissions:
-      id-token: write   # required for OIDC
+      id-token: write
       contents: read
 
     steps:
@@ -64,27 +64,43 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Check secrets are set
+        run: |
+          if [ -z "${{ secrets.EC2_HOST }}" ]; then
+            echo "ERROR: EC2_HOST secret is not set"
+            exit 1
+          fi
+          if [ -z "${{ secrets.EC2_SSH_KEY }}" ]; then
+            echo "ERROR: EC2_SSH_KEY secret is not set"
+            exit 1
+          fi
+          echo "Secrets OK — deploying to ${{ secrets.EC2_HOST }}"
+
       - name: Deploy to EC2
-        uses: appleboy/ssh-action@v1
+        uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            set -e
+
+            mkdir -p /home/ec2-user/toofan-platform
             cd /home/ec2-user/toofan-platform
 
-            # Pull latest images
+            # Authenticate to ECR
             aws ecr get-login-password --region us-east-1 | \
               docker login --username AWS --password-stdin \
               041808556268.dkr.ecr.us-east-1.amazonaws.com
 
+            # Pull latest images
             docker compose pull
 
-            # Run DB migrations before restarting backend
+            # Run DB migrations
             docker compose run --rm toofan-backend \
               npx prisma migrate deploy
 
-            # Rolling restart (zero-downtime for frontend/backend)
+            # Start/restart services
             docker compose up -d --no-deps toofan-backend toofan-frontend
 
             # Cleanup old images
