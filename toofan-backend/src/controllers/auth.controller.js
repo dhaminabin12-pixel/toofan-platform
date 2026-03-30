@@ -66,10 +66,16 @@ exports.register = asyncHandler(async (req, res) => {
       expiresAt: new Date(Date.now() + 10 * 60 * 1000), // 10 min
     }
   });
-  await sendSms(phone, `Welcome to TooFan! Your verification code is: ${otp}`);
+  try {
+    await sendSms(phone, `Welcome to TooFan! Your verification code is: ${otp}`);
+  } catch (smsErr) {
+    logger.warn(`SMS send failed (non-blocking): ${smsErr.message}`);
+  }
 
   logger.info(`New user registered: ${phone} [${role}]`);
 
+  // In dev/no-SMS mode, return OTP in response for testing
+  const devOtp = process.env.NODE_ENV !== "production" ? { otp } : {};
   res.status(201).json({
     success: true,
     message: "Registered successfully. Check your phone for OTP.",
@@ -77,6 +83,7 @@ exports.register = asyncHandler(async (req, res) => {
       user: { id: user.id, name, phone, email, role, isVerified: false },
       accessToken,
       refreshToken,
+      ...devOtp,
     },
   });
 });
@@ -144,9 +151,15 @@ exports.sendOtp = asyncHandler(async (req, res) => {
     reset_password: `Your TooFan password reset code: ${otp}. Valid for 10 minutes.`,
     login:          `Your TooFan login OTP: ${otp}. Valid for 10 minutes.`,
   };
-  await sendSms(phone, messages[purpose]);
+  try {
+    await sendSms(phone, messages[purpose]);
+  } catch (smsErr) {
+    logger.warn(`SMS send failed (non-blocking): ${smsErr.message}`);
+  }
 
-  res.json({ success: true, message: "OTP sent to your phone." });
+  // In dev/no-SMS mode, return OTP in response for testing
+  const devOtp = process.env.NODE_ENV !== "production" ? { otp } : {};
+  res.json({ success: true, message: "OTP sent to your phone.", ...devOtp });
 });
 
 // ── VERIFY OTP ────────────────────────────────────────────────
