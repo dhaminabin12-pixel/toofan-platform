@@ -1,8 +1,8 @@
-// âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
-//  TooFan  Â·  Integrated App
+// Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
+//  TooFan  ÃÂ·  Integrated App
 //  Combines customer / driver / business / admin / dev portals
 //  Wired to the real Node.js + Prisma + PostgreSQL backend
-// âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
 import { useState, useEffect, useRef, useCallback } from "react";
 import {
   Auth, Restaurants, Orders, Drivers, Payments,
@@ -19,7 +19,7 @@ import {
   onChatMessage,
 } from "./socket.js";
 
-// âââ Global style injection âââââââââââââââââââââââââââââââââââ
+// Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ Global style injection Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
 const GLOBAL_CSS = `
   @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
   *{margin:0;padding:0;box-sizing:border-box;}
@@ -33,7 +33,7 @@ const GLOBAL_CSS = `
   ::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:var(--darker);}::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
   input,button,select,textarea{font-family:'DM Sans',sans-serif;}
 
-  /* ââ auth ââ */
+  /* Ã¢ÂÂÃ¢ÂÂ auth Ã¢ÂÂÃ¢ÂÂ */
   .auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(ellipse at 50% 0%,#1a0a0a 0%,var(--dark) 60%);}
   .auth-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:28px 24px;width:100%;max-width:380px;}
   .auth-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.5rem;color:var(--red);margin-bottom:4px;}
@@ -54,7 +54,7 @@ const GLOBAL_CSS = `
   .divider::before,.divider::after{content:'';flex:1;border-top:1px solid var(--border);}
   select.form-input{background:var(--card2);cursor:pointer;}
 
-  /* ââ top bar ââ */
+  /* Ã¢ÂÂÃ¢ÂÂ top bar Ã¢ÂÂÃ¢ÂÂ */
   .top-bar{display:flex;align-items:center;background:var(--darker);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;padding:0 12px;gap:4px;}
   .top-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:var(--red);padding:14px 10px 14px 0;white-space:nowrap;flex-shrink:0;}
   .top-logo span{color:var(--text);}
@@ -64,7 +64,7 @@ const GLOBAL_CSS = `
   .logout-btn{margin-left:auto;flex-shrink:0;padding:6px 12px;background:none;border:1px solid var(--border);border-radius:7px;color:var(--muted);font-size:0.72rem;cursor:pointer;white-space:nowrap;}
   .logout-btn:hover{border-color:var(--red);color:var(--red);}
 
-  /* ââ shared card/section ââ */
+  /* Ã¢ÂÂÃ¢ÂÂ shared card/section Ã¢ÂÂÃ¢ÂÂ */
   .screen{min-height:calc(100vh - 51px);}
   .section-pad{padding:13px 14px;}
   .page-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;margin-bottom:3px;}
@@ -86,7 +86,7 @@ const GLOBAL_CSS = `
   .kpi-delta{font-size:0.62rem;font-weight:600;margin-top:4px;}
   .kpi-delta.up{color:var(--green);}.kpi-delta.down{color:var(--red);}
 
-  /* ââ restaurant/menu ââ */
+  /* Ã¢ÂÂÃ¢ÂÂ restaurant/menu Ã¢ÂÂÃ¢ÂÂ */
   .rest-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
   .rest-card{background:var(--card);border:1px solid var(--border);border-radius:13px;overflow:hidden;cursor:pointer;transition:transform 0.15s;}
   .rest-card:hover{transform:translateY(-2px);}
@@ -114,7 +114,7 @@ const GLOBAL_CSS = `
   .menu-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;}
   .section-title{font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:700;padding:12px 14px 8px;}
 
-  /* ââ driver ââ */
+  /* Ã¢ÂÂÃ¢ÂÂ driver Ã¢ÂÂÃ¢ÂÂ */
   .driver-hero{background:linear-gradient(135deg,#0d0a05 0%,var(--dark) 60%);padding:18px 14px;}
   .driver-name{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;}
   .status-toggle{display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:6px 12px;cursor:pointer;}
@@ -126,7 +126,7 @@ const GLOBAL_CSS = `
   .stat-val{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:var(--orange);}
   .stat-lbl{font-size:0.6rem;color:var(--muted);margin-top:2px;}
 
-  /* ââ job offer modal ââ */
+  /* Ã¢ÂÂÃ¢ÂÂ job offer modal Ã¢ÂÂÃ¢ÂÂ */
   .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;display:flex;align-items:flex-end;}
   .modal-sheet{background:var(--card);border-radius:18px 18px 0 0;padding:22px 18px;width:100%;border-top:1px solid var(--border);}
   .modal-title{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;margin-bottom:14px;text-align:center;}
@@ -134,7 +134,7 @@ const GLOBAL_CSS = `
   .accept-btn{flex:1;padding:13px;background:var(--green);color:white;border:none;border-radius:10px;font-weight:700;font-size:0.88rem;cursor:pointer;}
   .reject-btn{flex:1;padding:13px;background:var(--card2);color:var(--muted);border:1px solid var(--border);border-radius:10px;font-weight:600;font-size:0.88rem;cursor:pointer;}
 
-  /* ââ tracking ââ */
+  /* Ã¢ÂÂÃ¢ÂÂ tracking Ã¢ÂÂÃ¢ÂÂ */
   .track-stages{display:flex;flex-direction:column;gap:0;}
   .track-stage{display:flex;gap:12px;padding:10px 0;}
   .stage-line{display:flex;flex-direction:column;align-items:center;}
@@ -147,7 +147,7 @@ const GLOBAL_CSS = `
   .stage-label{font-size:0.82rem;font-weight:600;}
   .stage-sub{font-size:0.68rem;color:var(--muted);margin-top:2px;}
 
-  /* ââ chat ââ */
+  /* Ã¢ÂÂÃ¢ÂÂ chat Ã¢ÂÂÃ¢ÂÂ */
   .chat-wrap{display:flex;flex-direction:column;height:280px;}
   .chat-msgs{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:7px;}
   .bubble{max-width:74%;padding:7px 11px;border-radius:11px;font-size:0.78rem;line-height:1.4;}
@@ -158,7 +158,7 @@ const GLOBAL_CSS = `
   .chat-input{flex:1;background:var(--card2);border:1px solid var(--border);border-radius:18px;padding:7px 13px;font-size:0.8rem;color:var(--text);outline:none;}
   .chat-send{width:32px;height:32px;border-radius:50%;background:var(--red);border:none;color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 
-  /* ââ admin ââ */
+  /* Ã¢ÂÂÃ¢ÂÂ admin Ã¢ÂÂÃ¢ÂÂ */
   .admin-tabs{display:flex;border-bottom:1px solid var(--border);padding:0 13px;gap:2px;overflow-x:auto;}
   .admin-tab{padding:9px 13px;font-size:0.72rem;font-weight:500;cursor:pointer;color:var(--muted);border:none;background:none;border-bottom:2px solid transparent;white-space:nowrap;}
   .admin-tab.active{color:var(--blue);border-bottom-color:var(--blue);}
@@ -166,7 +166,7 @@ const GLOBAL_CSS = `
   .order-id{font-size:0.7rem;font-weight:700;color:var(--blue);}
   .order-detail{font-size:0.7rem;color:var(--muted);margin-top:3px;}
 
-  /* ââ biz ââ */
+  /* Ã¢ÂÂÃ¢ÂÂ biz Ã¢ÂÂÃ¢ÂÂ */
   .biz-wrap{background:#FAFAF7;min-height:100vh;color:#0D0D0D;font-family:'DM Sans',sans-serif;}
   .biz-header{background:white;border-bottom:1px solid #E8E5E0;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;}
   .biz-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:#E63946;}
@@ -178,7 +178,7 @@ const GLOBAL_CSS = `
   .biz-kpi-val{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:#0D0D0D;}
   .biz-kpi-lbl{font-size:0.65rem;color:#888;margin-top:2px;}
 
-  /* ââ dev portal ââ */
+  /* Ã¢ÂÂÃ¢ÂÂ dev portal Ã¢ÂÂÃ¢ÂÂ */
   .dev-wrap{display:flex;height:100vh;background:#0A0A0F;overflow:hidden;}
   .dev-sidebar{width:200px;flex-shrink:0;background:#06060A;border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;}
   .dev-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:0.95rem;color:var(--red);padding:16px 14px;border-bottom:1px solid var(--border);}
@@ -199,13 +199,13 @@ const GLOBAL_CSS = `
   .config-input{background:var(--card2);border:1px solid var(--border);border-radius:7px;padding:7px 10px;font-size:0.8rem;color:var(--text);outline:none;width:100px;text-align:right;}
   .config-input:focus{border-color:var(--blue);}
 
-  /* ââ notifications ââ */
+  /* Ã¢ÂÂÃ¢ÂÂ notifications Ã¢ÂÂÃ¢ÂÂ */
   .notif-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);}
   .notif-dot{width:7px;height:7px;border-radius:50%;background:var(--red);flex-shrink:0;margin-top:5px;}
   .notif-text{font-size:0.78rem;line-height:1.5;}
   .notif-time{font-size:0.62rem;color:var(--muted);margin-top:2px;}
 
-  /* ââ misc ââ */
+  /* Ã¢ÂÂÃ¢ÂÂ misc Ã¢ÂÂÃ¢ÂÂ */
   .spinner{display:inline-block;width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--red);border-radius:50%;animation:spin 0.7s linear infinite;}
   @keyframes spin{to{transform:rotate(360deg)}}
   .loading-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;color:var(--muted);}
@@ -214,7 +214,7 @@ const GLOBAL_CSS = `
   .toast.err{border-color:rgba(230,57,70,0.3);color:var(--red);}
 `;
 
-// âââ Toast ââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ Toast Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
 function Toast({ msg, type }) {
   if (!msg) return null;
   return <div className={`toast ${type}`}>{msg}</div>;
@@ -228,66 +228,89 @@ function useToast() {
   return [toast, show];
 }
 
-// âââ Auth Screen ââââââââââââââââââââââââââââââââââââââââââââââ
+// Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ Auth Screen Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
 function AuthScreen({ onLogin }) {
-  const [mode, setMode]         = useState("login");   // "login" | "register" | "otp"
+  // mode: "login" | "register" | "otp" | "forgot" | "forgot_otp" | "forgot_newpass"
+  const [mode, setMode]         = useState("login");
   const [channel, setChannel]   = useState("phone");   // "phone" | "email"
-  const [identifier, setId]     = useState("");        // phone or email value
+  const [identifier, setId]     = useState("");        // phone or email
   const [password, setPass]     = useState("");
   const [name, setName]         = useState("");
   const [email, setEmail]       = useState("");
   const [role, setRole]         = useState("CUSTOMER");
   const [otp, setOtp]           = useState("");
   const [otpPurpose, setPurpose]= useState("verify_phone");
+  const [newPass, setNewPass]   = useState("");
+  const [confirmPass, setConfP] = useState("");
   const [err,  setErr]          = useState("");
   const [ok,   setOk]           = useState("");
   const [busy, setBusy]         = useState(false);
 
-  // When channel changes, clear the identifier field
-  const handleChannelSwitch = (ch) => {
-    setChannel(ch);
-    setId("");
-    setErr("");
-    setOk("");
-  };
+  const reset = (nextMode) => { setErr(""); setOk(""); setOtp(""); if (nextMode) setMode(nextMode); };
+
+  const handleChannelSwitch = (ch) => { setChannel(ch); setId(""); reset(); };
 
   const handle = async (e) => {
     e.preventDefault();
     setErr(""); setOk("");
     setBusy(true);
     try {
+
+      // ── Sign In ──────────────────────────────────────────
       if (mode === "login") {
-        // Login still uses phone (backend login endpoint)
         const d = await Auth.login(identifier, password);
         setAuth({ token: d.accessToken, refreshToken: d.refreshToken, user: d.user });
         onLogin(d.user);
 
+      // ── Register: create account → send OTP ──────────────
       } else if (mode === "register") {
-        // Create the account first, which also sends the OTP
-        const phone = channel === "phone" ? identifier : "";
+        const phoneVal = channel === "phone" ? identifier : "";
         const emailVal = channel === "email" ? identifier : email;
-        const r = await Auth.register(name, phone || "0000000000", emailVal, password, role);
+        const r = await Auth.register(name, phoneVal || "0000000000", emailVal, password, role);
         setAuth({ token: r.accessToken, refreshToken: r.refreshToken, user: r.user });
-        // Send OTP via the chosen channel identifier
         await Auth.sendOtp(identifier, "verify_phone");
         setPurpose("verify_phone");
         setMode("otp");
         setOk("OTP sent to your " + channel);
 
+      // ── Verify phone/email OTP (post-register) ────────────
       } else if (mode === "otp") {
         await Auth.verifyOtp(identifier, otp, otpPurpose);
-        setOk("Verified! Please sign in.");
-        setMode("login");
+        setOk("Verified! You can now sign in.");
+        reset("login");
+
+      // ── Forgot: send reset OTP to phone/email ─────────────
+      } else if (mode === "forgot") {
+        await Auth.sendOtp(identifier, "reset_password");
+        setOk("Reset code sent to your " + (identifier.includes("@") ? "email" : "phone"));
+        setMode("forgot_otp");
+
+      // ── Forgot: verify reset OTP ──────────────────────────
+      } else if (mode === "forgot_otp") {
+        await Auth.verifyOtp(identifier, otp, "reset_password");
+        setOtp("");
+        setMode("forgot_newpass");
+
+      // ── Forgot: set new password ──────────────────────────
+      } else if (mode === "forgot_newpass") {
+        if (newPass.length < 6) throw new Error("Password must be at least 6 characters");
+        if (newPass !== confirmPass) throw new Error("Passwords do not match");
+        await Auth.resetPassword(identifier, otp, newPass);
+        setOk("Password changed! Please sign in.");
+        reset("login");
       }
+
     } catch (ex) {
-      setErr(ex.message || "Something went wrong");
+      setErr(ex.name === "AbortError" ? "Request timed out. Try again." : ex.message || "Something went wrong");
     } finally {
       setBusy(false);
     }
   };
 
-  const channelLabel = channel === "email" ? "Email address" : "Phone number";
+  const channelLabel       = channel === "email" ? "Email address" : "Phone number";
   const channelPlaceholder = channel === "email" ? "you@example.com" : "98XXXXXXXX";
+  const inForgotFlow       = mode === "forgot" || mode === "forgot_otp" || mode === "forgot_newpass";
+  const inOtpFlow          = mode === "otp" || mode === "forgot_otp";
 
   return (
     <div className="auth-wrap">
@@ -295,10 +318,26 @@ function AuthScreen({ onLogin }) {
         <div className="auth-logo">🌪 TooFan</div>
         <div className="auth-sub">Kathmandu&apos;s fastest delivery platform</div>
 
-        {mode !== "otp" && (
+        {/* Login / Register tabs — hidden during OTP and forgot flows */}
+        {!inForgotFlow && mode !== "otp" && (
           <div className="auth-tabs">
-            <button className={`auth-tab ${mode === "login"    ? "active" : ""}`} onClick={() => { setMode("login");    setErr(""); setOk(""); }}>Sign In</button>
-            <button className={`auth-tab ${mode === "register" ? "active" : ""}`} onClick={() => { setMode("register"); setErr(""); setOk(""); }}>Register</button>
+            <button className={`auth-tab ${mode === "login"    ? "active" : ""}`} onClick={() => reset("login")}>Sign In</button>
+            <button className={`auth-tab ${mode === "register" ? "active" : ""}`} onClick={() => reset("register")}>Register</button>
+          </div>
+        )}
+
+        {/* Forgot password header */}
+        {inForgotFlow && (
+          <div style={{ textAlign: "center", marginBottom: "8px" }}>
+            <div style={{ fontWeight: 700, fontSize: "1rem", color: "var(--text)" }}>
+              {mode === "forgot"         ? "🔑 Forgot Password"  :
+               mode === "forgot_otp"    ? "📲 Enter Reset Code"  :
+                                          "🔒 Set New Password"}
+            </div>
+            <button type="button" onClick={() => reset("login")}
+              style={{ fontSize: "0.72rem", color: "var(--muted)", background: "none", border: "none", cursor: "pointer", marginTop: "4px" }}>
+              ← Back to Sign In
+            </button>
           </div>
         )}
 
@@ -306,25 +345,29 @@ function AuthScreen({ onLogin }) {
         {ok  && <div className="auth-ok">{ok}</div>}
 
         <form onSubmit={handle}>
-          {/* Channel toggle — shown on register and login */}
-          {mode !== "otp" && (
+
+          {/* Channel toggle — login, register, forgot */}
+          {(mode === "login" || mode === "register" || mode === "forgot") && (
             <div className="form-group">
-              <label className="form-label">Sign in with</label>
+              <label className="form-label">
+                {mode === "forgot" ? "Recover via" : "Sign in with"}
+              </label>
               <div style={{ display: "flex", gap: "8px" }}>
-                <button type="button" className={`auth-tab ${channel === "phone" ? "active" : ""}`} style={{ flex: 1 }} onClick={() => handleChannelSwitch("phone")}>📱 Phone</button>
-                <button type="button" className={`auth-tab ${channel === "email" ? "active" : ""}`} style={{ flex: 1 }} onClick={() => handleChannelSwitch("email")}>✉️ Email</button>
+                <button type="button" className={`auth-tab ${channel === "phone" ? "active" : ""}`}
+                  style={{ flex: 1 }} onClick={() => handleChannelSwitch("phone")}>📱 Phone</button>
+                <button type="button" className={`auth-tab ${channel === "email" ? "active" : ""}`}
+                  style={{ flex: 1 }} onClick={() => handleChannelSwitch("email")}>✉️ Email</button>
               </div>
             </div>
           )}
 
-          {/* Register-only fields */}
+          {/* ── Register-only extra fields ── */}
           {mode === "register" && (
             <>
               <div className="form-group">
                 <label className="form-label">Full Name</label>
                 <input className="form-input" value={name} onChange={e => setName(e.target.value)} placeholder="Aarav Sharma" required />
               </div>
-              {/* When registering via phone, still collect email (required by schema) */}
               {channel === "phone" && (
                 <div className="form-group">
                   <label className="form-label">Email</label>
@@ -342,35 +385,76 @@ function AuthScreen({ onLogin }) {
             </>
           )}
 
-          {/* Identifier (phone or email) + password — hidden during OTP step */}
-          {mode !== "otp" && (
+          {/* ── Identifier (phone/email) — login, register, forgot ── */}
+          {(mode === "login" || mode === "register" || mode === "forgot") && (
+            <div className="form-group">
+              <label className="form-label">{channelLabel}</label>
+              <input className="form-input"
+                type={channel === "email" ? "email" : "tel"}
+                value={identifier}
+                onChange={e => setId(e.target.value)}
+                placeholder={channelPlaceholder}
+                required />
+            </div>
+          )}
+
+          {/* ── Password — login and register only ── */}
+          {(mode === "login" || mode === "register") && (
+            <div className="form-group">
+              <label className="form-label">Password</label>
+              <input className="form-input" type="password" value={password}
+                onChange={e => setPass(e.target.value)} placeholder="••••••" required />
+            </div>
+          )}
+
+          {/* ── OTP input — verify or forgot_otp ── */}
+          {inOtpFlow && (
+            <div className="form-group">
+              <label className="form-label">
+                {mode === "forgot_otp" ? "Reset code sent to " + identifier : "OTP sent to " + identifier}
+              </label>
+              <input className="form-input" value={otp} onChange={e => setOtp(e.target.value)}
+                placeholder="6-digit code" maxLength={6} inputMode="numeric" required />
+            </div>
+          )}
+
+          {/* ── New password fields — forgot_newpass only ── */}
+          {mode === "forgot_newpass" && (
             <>
               <div className="form-group">
-                <label className="form-label">{channelLabel}</label>
-                <input className="form-input" type={channel === "email" ? "email" : "tel"} value={identifier} onChange={e => setId(e.target.value)} placeholder={channelPlaceholder} required />
+                <label className="form-label">New Password</label>
+                <input className="form-input" type="password" value={newPass}
+                  onChange={e => setNewPass(e.target.value)} placeholder="Min 6 characters" required />
               </div>
               <div className="form-group">
-                <label className="form-label">Password</label>
-                <input className="form-input" type="password" value={password} onChange={e => setPass(e.target.value)} placeholder="••••••" required />
+                <label className="form-label">Confirm New Password</label>
+                <input className="form-input" type="password" value={confirmPass}
+                  onChange={e => setConfP(e.target.value)} placeholder="Repeat password" required />
               </div>
             </>
           )}
 
-          {/* OTP input */}
-          {mode === "otp" && (
-            <div className="form-group">
-              <label className="form-label">Enter OTP sent to {identifier}</label>
-              <input className="form-input" value={otp} onChange={e => setOtp(e.target.value)} placeholder="6-digit code" maxLength={6} required />
-            </div>
-          )}
-
           <button className="auth-btn" disabled={busy} type="submit">
-            {busy ? "..." : mode === "login" ? "Sign In" : mode === "register" ? "Send OTP" : "Verify & Continue"}
+            {busy ? "..." :
+             mode === "login"         ? "Sign In" :
+             mode === "register"      ? "Send OTP" :
+             mode === "otp"           ? "Verify & Continue" :
+             mode === "forgot"        ? "Send Reset Code" :
+             mode === "forgot_otp"    ? "Verify Code" :
+                                        "Save New Password"}
           </button>
         </form>
 
+        {/* Forgot password link — only on login screen */}
         {mode === "login" && (
-          <p style={{ fontSize: "0.68rem", color: "var(--muted)", textAlign: "center", marginTop: "14px" }}>
+          <button type="button" onClick={() => { setId(""); reset("forgot"); }}
+            style={{ display: "block", margin: "10px auto 0", fontSize: "0.75rem", color: "var(--muted)", background: "none", border: "none", cursor: "pointer", textDecoration: "underline" }}>
+            Forgot password?
+          </button>
+        )}
+
+        {mode === "login" && (
+          <p style={{ fontSize: "0.68rem", color: "var(--muted)", textAlign: "center", marginTop: "10px" }}>
             Test: 9888888888 / customer123 &nbsp;|&nbsp; 9800000000 / admin123
           </p>
         )}
@@ -379,11 +463,11 @@ function AuthScreen({ onLogin }) {
   );
 }
 
-// âââ Customer Portal ââââââââââââââââââââââââââââââââââââââââââ
+// Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ Customer Portal Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
 const MENU_FALLBACK = {};
 const REST_FALLBACK = [
-  { id: 1, name: "Momo House", cuisine: "Nepali", rating: 4.8, estimatedTime: "20-30", imageUrl: "ð¥" },
-  { id: 2, name: "Dal Bhat Palace", cuisine: "Traditional", rating: 4.6, estimatedTime: "25-35", imageUrl: "ð" },
+  { id: 1, name: "Momo House", cuisine: "Nepali", rating: 4.8, estimatedTime: "20-30", imageUrl: "Ã°ÂÂ¥Â" },
+  { id: 2, name: "Dal Bhat Palace", cuisine: "Traditional", rating: 4.6, estimatedTime: "25-35", imageUrl: "Ã°ÂÂÂ" },
 ];
 
 function CustomerPortal({ user, socket }) {
@@ -428,7 +512,7 @@ function CustomerPortal({ user, socket }) {
     setCart({});
     try {
       const d = await Restaurants.get(rest.id);
-      // Backend returns menuCategories[].items â flatten to a single list
+      // Backend returns menuCategories[].items Ã¢ÂÂ flatten to a single list
       const items = d.menuCategories?.flatMap(c => c.items) ?? d.menuItems ?? d.menu ?? [];
       setMenu(items);
     } catch {
@@ -460,7 +544,7 @@ function CustomerPortal({ user, socket }) {
         : d.value;
       if (d.maxDiscount) amt = Math.min(amt, d.maxDiscount);
       setDiscount(amt);
-      showToast(`Coupon applied! -à¤°à¥${amt}`, "ok");
+      showToast(`Coupon applied! -Ã Â¤Â°Ã Â¥Â${amt}`, "ok");
     } catch (ex) {
       showToast(ex.message || "Invalid coupon", "err");
     }
@@ -506,32 +590,32 @@ function CustomerPortal({ user, socket }) {
   }, [screen, activeOrder?.id]);
 
   const STAGE_DATA = [
-    { key: "PENDING",    label: "Order Confirmed", icon: "â", sub: "Restaurant received your order" },
-    { key: "PREPARING",  label: "Preparing", icon: "ð³", sub: "Kitchen is working on it" },
-    { key: "PICKED_UP",  label: "Picked Up", icon: "ðµ", sub: "Driver is on the way" },
-    { key: "DELIVERED",  label: "Delivered!", icon: "ð", sub: "Enjoy your meal" },
+    { key: "PENDING",    label: "Order Confirmed", icon: "Ã¢ÂÂ", sub: "Restaurant received your order" },
+    { key: "PREPARING",  label: "Preparing", icon: "Ã°ÂÂÂ³", sub: "Kitchen is working on it" },
+    { key: "PICKED_UP",  label: "Picked Up", icon: "Ã°ÂÂÂµ", sub: "Driver is on the way" },
+    { key: "DELIVERED",  label: "Delivered!", icon: "Ã°ÂÂÂ", sub: "Enjoy your meal" },
   ];
   const stageIdx = activeOrder ? STAGE_DATA.findIndex(s => s.key === activeOrder.status) : -1;
 
-  // ââ Render âââââââââââââââââââââââââââââââââââââââââââââââââ
+  // Ã¢ÂÂÃ¢ÂÂ Render Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
   if (screen === "menu" && activeRest) return (
     <div className="screen">
       <div className="menu-header">
-        <button className="back-btn" onClick={() => setScreen("home")}>â</button>
+        <button className="back-btn" onClick={() => setScreen("home")}>Ã¢ÂÂ</button>
         <div>
-          <div className="menu-title">{activeRest.imageUrl || activeRest.img || "ð½ï¸"} {activeRest.name}</div>
-          <div style={{ fontSize: "0.65rem", color: "var(--muted)" }}>â­ {activeRest.rating} Â· {activeRest.prepTimeMin || activeRest.estimatedTime || activeRest.time} min</div>
+          <div className="menu-title">{activeRest.imageUrl || activeRest.img || "Ã°ÂÂÂ½Ã¯Â¸Â"} {activeRest.name}</div>
+          <div style={{ fontSize: "0.65rem", color: "var(--muted)" }}>Ã¢Â­Â {activeRest.rating} ÃÂ· {activeRest.prepTimeMin || activeRest.estimatedTime || activeRest.time} min</div>
         </div>
       </div>
       <div style={{ padding: "9px 13px", paddingBottom: cartCount ? "80px" : "20px" }}>
         {menuItems.map(item => (
           <div className="menu-item" key={item.id}>
-            <span className="item-emoji">{item.imageUrl || "ð½ï¸"}</span>
+            <span className="item-emoji">{item.imageUrl || "Ã°ÂÂÂ½Ã¯Â¸Â"}</span>
             <span className="item-name">{item.name}</span>
-            <span className="item-price">à¤°à¥{item.price}</span>
+            <span className="item-price">Ã Â¤Â°Ã Â¥Â{item.price}</span>
             {cart[item.id] ? (
               <div className="qty-ctrl">
-                <button className="qty-btn" onClick={() => adjust(item, -1)}>â</button>
+                <button className="qty-btn" onClick={() => adjust(item, -1)}>Ã¢ÂÂ</button>
                 <span className="qty-num">{cart[item.id].qty}</span>
                 <button className="qty-btn" onClick={() => adjust(item, 1)}>+</button>
               </div>
@@ -545,7 +629,7 @@ function CustomerPortal({ user, socket }) {
       {cartCount > 0 && (
         <div className="cart-bar" onClick={() => setScreen("checkout")}>
           <span className="cart-info">{cartCount} item{cartCount > 1 ? "s" : ""}</span>
-          <span className="cart-total">View Cart Â· à¤°à¥{subtotal}</span>
+          <span className="cart-total">View Cart ÃÂ· Ã Â¤Â°Ã Â¥Â{subtotal}</span>
         </div>
       )}
       <Toast {...(toast || {})} />
@@ -555,7 +639,7 @@ function CustomerPortal({ user, socket }) {
   if (screen === "checkout") return (
     <div className="screen">
       <div className="menu-header">
-        <button className="back-btn" onClick={() => setScreen("menu")}>â</button>
+        <button className="back-btn" onClick={() => setScreen("menu")}>Ã¢ÂÂ</button>
         <div className="menu-title">Checkout</div>
       </div>
       <div style={{ padding: "13px", paddingBottom: "30px" }}>
@@ -563,15 +647,15 @@ function CustomerPortal({ user, socket }) {
           <div className="card-title">Your Order</div>
           {cartItems.map(i => (
             <div className="row" key={i.id} style={{ padding: "4px 0", fontSize: "0.8rem" }}>
-              <span>{i.name} Ã {i.qty}</span>
-              <span style={{ color: "var(--orange)" }}>à¤°à¥{i.price * i.qty}</span>
+              <span>{i.name} ÃÂ {i.qty}</span>
+              <span style={{ color: "var(--orange)" }}>Ã Â¤Â°Ã Â¥Â{i.price * i.qty}</span>
             </div>
           ))}
           <hr style={{ border: "none", borderTop: "1px solid var(--border)", margin: "8px 0" }} />
-          <div className="row" style={{ fontSize: "0.75rem", color: "var(--muted)" }}><span>Subtotal</span><span>à¤°à¥{subtotal}</span></div>
-          {discount > 0 && <div className="row" style={{ fontSize: "0.75rem", color: "var(--green)" }}><span>Discount</span><span>-à¤°à¥{discount}</span></div>}
-          <div className="row" style={{ fontSize: "0.75rem", color: "var(--muted)" }}><span>Delivery Fee</span><span>à¤°à¥{delivFee}</span></div>
-          <div className="row" style={{ fontWeight: 700, marginTop: "5px" }}><span>Total</span><span style={{ color: "var(--orange)" }}>à¤°à¥{total}</span></div>
+          <div className="row" style={{ fontSize: "0.75rem", color: "var(--muted)" }}><span>Subtotal</span><span>Ã Â¤Â°Ã Â¥Â{subtotal}</span></div>
+          {discount > 0 && <div className="row" style={{ fontSize: "0.75rem", color: "var(--green)" }}><span>Discount</span><span>-Ã Â¤Â°Ã Â¥Â{discount}</span></div>}
+          <div className="row" style={{ fontSize: "0.75rem", color: "var(--muted)" }}><span>Delivery Fee</span><span>Ã Â¤Â°Ã Â¥Â{delivFee}</span></div>
+          <div className="row" style={{ fontWeight: 700, marginTop: "5px" }}><span>Total</span><span style={{ color: "var(--orange)" }}>Ã Â¤Â°Ã Â¥Â{total}</span></div>
         </div>
 
         <div className="card">
@@ -593,7 +677,7 @@ function CustomerPortal({ user, socket }) {
         </div>
 
         <button className="action-btn" disabled={busy || cartCount === 0} onClick={placeOrder}>
-          {busy ? "Placing..." : `Place Order Â· à¤°à¥${total}`}
+          {busy ? "Placing..." : `Place Order ÃÂ· Ã Â¤Â°Ã Â¥Â${total}`}
         </button>
       </div>
       <Toast {...(toast || {})} />
@@ -603,7 +687,7 @@ function CustomerPortal({ user, socket }) {
   if (screen === "tracking" && activeOrder) return (
     <div className="screen">
       <div className="menu-header">
-        <button className="back-btn" onClick={() => setScreen("home")}>â</button>
+        <button className="back-btn" onClick={() => setScreen("home")}>Ã¢ÂÂ</button>
         <div className="menu-title">Order #{activeOrder.id?.toString().slice(-4) || "..."}</div>
       </div>
       <div style={{ padding: "13px", paddingBottom: "20px" }}>
@@ -614,7 +698,7 @@ function CustomerPortal({ user, socket }) {
               <div className="track-stage" key={s.key}>
                 <div className="stage-line">
                   <div className={`stage-dot ${i < stageIdx ? "done" : i === stageIdx ? "active" : ""}`}>
-                    {i <= stageIdx ? s.icon : "â"}
+                    {i <= stageIdx ? s.icon : "Ã¢ÂÂ"}
                   </div>
                   {i < STAGE_DATA.length - 1 && <div className={`stage-connector ${i < stageIdx ? "done" : ""}`} style={{ height: "24px" }} />}
                 </div>
@@ -633,11 +717,11 @@ function CustomerPortal({ user, socket }) {
             <div className="row">
               <div>
                 <div style={{ fontWeight: 600, fontSize: "0.88rem" }}>{activeOrder.driver.user?.name || "Driver"}</div>
-                <div style={{ fontSize: "0.68rem", color: "var(--muted)" }}>â­ {activeOrder.driver.rating || "â"} Â· {activeOrder.driver.vehicleType || "Motorcycle"}</div>
+                <div style={{ fontSize: "0.68rem", color: "var(--muted)" }}>Ã¢Â­Â {activeOrder.driver.rating || "Ã¢ÂÂ"} ÃÂ· {activeOrder.driver.vehicleType || "Motorcycle"}</div>
               </div>
               <a href={`tel:${activeOrder.driver.user?.phone}`} style={{ background: "var(--green)", color: "white", padding: "7px 14px", borderRadius: "8px", fontSize: "0.75rem", fontWeight: 700, textDecoration: "none" }}>Call</a>
             </div>
-            {driverPos && <div style={{ fontSize: "0.68rem", color: "var(--muted)", marginTop: "6px" }}>ð {driverPos.lat?.toFixed(4)}, {driverPos.lng?.toFixed(4)}</div>}
+            {driverPos && <div style={{ fontSize: "0.68rem", color: "var(--muted)", marginTop: "6px" }}>Ã°ÂÂÂ {driverPos.lat?.toFixed(4)}, {driverPos.lng?.toFixed(4)}</div>}
           </div>
         )}
 
@@ -655,7 +739,7 @@ function CustomerPortal({ user, socket }) {
             </div>
             <div className="chat-input-row">
               <input className="chat-input" value={chatInput} onChange={e => setChatInput(e.target.value)} placeholder="Message driver..." onKeyDown={e => e.key === "Enter" && sendChat()} />
-              <button className="chat-send" onClick={sendChat}>â¤</button>
+              <button className="chat-send" onClick={sendChat}>Ã¢ÂÂ¤</button>
             </div>
           </div>
         </div>
@@ -678,7 +762,7 @@ function CustomerPortal({ user, socket }) {
                 </div>
               </div>
               <div style={{ textAlign: "right" }}>
-                <div style={{ fontWeight: 700, color: "var(--orange)", fontSize: "0.88rem" }}>à¤°à¥{o.totalAmount || o.total}</div>
+                <div style={{ fontWeight: 700, color: "var(--orange)", fontSize: "0.88rem" }}>Ã Â¤Â°Ã Â¥Â{o.totalAmount || o.total}</div>
                 <span className={`tag ${o.status === "DELIVERED" ? "tag-green" : o.status === "CANCELLED" ? "tag-red" : "tag-blue"}`}>{o.status}</span>
               </div>
             </div>
@@ -693,7 +777,7 @@ function CustomerPortal({ user, socket }) {
   return (
     <div className="screen" style={{ paddingBottom: "70px" }}>
       <div style={{ padding: "18px 14px 14px", background: "linear-gradient(135deg,#1a0a0a 0%,var(--dark) 60%)", borderBottom: "1px solid var(--border)" }}>
-        <div style={{ fontSize: "0.7rem", color: "var(--muted)" }}>Namaste, {user.name?.split(" ")[0]} ð</div>
+        <div style={{ fontSize: "0.7rem", color: "var(--muted)" }}>Namaste, {user.name?.split(" ")[0]} Ã°ÂÂÂ</div>
         <div style={{ fontFamily: "Syne,sans-serif", fontWeight: 800, fontSize: "1.3rem", lineHeight: 1.1, margin: "2px 0 12px" }}>
           What are you <span style={{ color: "var(--red)" }}>craving</span>?
         </div>
@@ -703,10 +787,10 @@ function CustomerPortal({ user, socket }) {
       <div style={{ padding: "0 14px 14px" }} className="rest-grid">
         {restaurants.map(r => (
           <div className="rest-card" key={r.id} onClick={() => openMenu(r)}>
-            <div className="rest-img">{r.imageUrl || r.img || "ð½ï¸"}</div>
+            <div className="rest-img">{r.imageUrl || r.img || "Ã°ÂÂÂ½Ã¯Â¸Â"}</div>
             <div className="rest-body">
               <div className="rest-name">{r.name}</div>
-              <div className="rest-meta">â­ {r.rating} Â· {r.prepTimeMin || r.estimatedTime || r.time} min</div>
+              <div className="rest-meta">Ã¢Â­Â {r.rating} ÃÂ· {r.prepTimeMin || r.estimatedTime || r.time} min</div>
               {(r.cuisineType || r.cuisine) && <div className="rest-meta">{r.cuisineType || r.cuisine}</div>}
             </div>
           </div>
@@ -720,14 +804,14 @@ function CustomerPortal({ user, socket }) {
 
       {/* Bottom nav */}
       <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "var(--darker)", borderTop: "1px solid var(--border)", display: "flex", zIndex: 90 }}>
-        {[["ð ", "home", "Home"], ["ð", "history", "Orders"]].map(([icon, id, label]) => (
+        {[["Ã°ÂÂÂ ", "home", "Home"], ["Ã°ÂÂÂ", "history", "Orders"]].map(([icon, id, label]) => (
           <button key={id} onClick={() => { setBnav(id); setScreen(id); }} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", padding: "9px 4px", cursor: "pointer", fontSize: "0.58rem", color: bnav === id ? "var(--red)" : "var(--muted)", gap: "2px", border: "none", background: "none" }}>
             <span style={{ fontSize: "1.15rem" }}>{icon}</span>{label}
           </button>
         ))}
         {activeOrder && (
           <button onClick={() => { setBnav("tracking"); setScreen("tracking"); }} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", padding: "9px 4px", cursor: "pointer", fontSize: "0.58rem", color: bnav === "tracking" ? "var(--orange)" : "var(--muted)", gap: "2px", border: "none", background: "none" }}>
-            <span style={{ fontSize: "1.15rem" }}>ðµ</span>Track
+            <span style={{ fontSize: "1.15rem" }}>Ã°ÂÂÂµ</span>Track
           </button>
         )}
       </div>
@@ -736,7 +820,7 @@ function CustomerPortal({ user, socket }) {
   );
 }
 
-// âââ Driver Portal ââââââââââââââââââââââââââââââââââââââââââââ
+// Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ Driver Portal Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
 function DriverPortal({ user, socket }) {
   const [online, setOnline]       = useState(false);
   const [driverData, setDriver]   = useState(null);
@@ -816,14 +900,14 @@ function DriverPortal({ user, socket }) {
       {jobOffer && (
         <div className="modal-overlay">
           <div className="modal-sheet">
-            <div className="modal-title">ðµ New Job Offer!</div>
+            <div className="modal-title">Ã°ÂÂÂµ New Job Offer!</div>
             <div className="card" style={{ margin: 0, marginBottom: 4 }}>
               <div style={{ fontSize: "0.8rem" }}>Order #{jobOffer.orderId?.toString().slice(-4)}</div>
               <div style={{ fontSize: "0.72rem", color: "var(--muted)", marginTop: "4px" }}>
-                {jobOffer.restaurantName || "Restaurant"} â Customer
+                {jobOffer.restaurantName || "Restaurant"} Ã¢ÂÂ Customer
               </div>
               <div style={{ fontSize: "0.72rem", color: "var(--muted)" }}>
-                Estimated earning: à¤°à¥{jobOffer.estimatedEarning || 65}
+                Estimated earning: Ã Â¤Â°Ã Â¥Â{jobOffer.estimatedEarning || 65}
               </div>
             </div>
             <div className="modal-row">
@@ -847,9 +931,9 @@ function DriverPortal({ user, socket }) {
         </div>
         <div className="driver-stats">
           {[
-            ["à¤°à¥" + todayEarning, "Today"],
+            ["Ã Â¤Â°Ã Â¥Â" + todayEarning, "Today"],
             [driverData?.tripsCount || trips.length, "Trips"],
-            [driverData?.rating?.toFixed(1) || "â", "Rating"],
+            [driverData?.rating?.toFixed(1) || "Ã¢ÂÂ", "Rating"],
           ].map(([val, lbl]) => (
             <div className="stat-card" key={lbl}>
               <div className="stat-val">{val}</div>
@@ -874,12 +958,12 @@ function DriverPortal({ user, socket }) {
             <div className="card">
               <div className="card-title">Active Delivery</div>
               <div style={{ fontSize: "0.82rem", fontWeight: 600 }}>Order #{activeOrder.orderId?.toString().slice(-4)}</div>
-              <div style={{ fontSize: "0.7rem", color: "var(--muted)", margin: "4px 0 12px" }}>{activeOrder.restaurantName || "Restaurant"} â Customer</div>
+              <div style={{ fontSize: "0.7rem", color: "var(--muted)", margin: "4px 0 12px" }}>{activeOrder.restaurantName || "Restaurant"} Ã¢ÂÂ Customer</div>
               <button className="action-btn green" onClick={markDelivered}>Mark as Delivered</button>
             </div>
           ) : (
             <div className="card" style={{ textAlign: "center" }}>
-              <div style={{ fontSize: "2rem", marginBottom: "8px" }}>{online ? "ð¢" : "â­"}</div>
+              <div style={{ fontSize: "2rem", marginBottom: "8px" }}>{online ? "Ã°ÂÂÂ¢" : "Ã¢Â­Â"}</div>
               <div style={{ fontSize: "0.82rem", fontWeight: 600 }}>{online ? "Waiting for orders..." : "You are offline"}</div>
               <div style={{ fontSize: "0.7rem", color: "var(--muted)", marginTop: "4px" }}>{online ? "Job offers will appear here" : "Toggle to go online and start earning"}</div>
             </div>
@@ -888,8 +972,8 @@ function DriverPortal({ user, socket }) {
           <div className="card">
             <div className="card-title">Weekly Target</div>
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.78rem", marginBottom: "6px" }}>
-              <span>à¤°à¥{weekEarning}</span>
-              <span style={{ color: "var(--muted)" }}>of à¤°à¥{weekTarget}</span>
+              <span>Ã Â¤Â°Ã Â¥Â{weekEarning}</span>
+              <span style={{ color: "var(--muted)" }}>of Ã Â¤Â°Ã Â¥Â{weekTarget}</span>
             </div>
             <div style={{ background: "rgba(255,255,255,0.1)", borderRadius: "4px", height: "5px", overflow: "hidden" }}>
               <div style={{ height: "100%", background: "var(--green)", borderRadius: "4px", width: `${Math.min(100, (weekEarning / weekTarget) * 100)}%`, transition: "width 0.5s" }} />
@@ -902,8 +986,8 @@ function DriverPortal({ user, socket }) {
         <div style={{ padding: "13px" }}>
           <div className="card" style={{ background: "linear-gradient(135deg,#0d1a0a,var(--dark))", borderColor: "rgba(46,194,126,0.2)" }}>
             <div style={{ fontSize: "0.6rem", color: "var(--muted)", letterSpacing: "1px", textTransform: "uppercase", marginBottom: "4px" }}>Today's Earnings</div>
-            <div style={{ fontFamily: "Syne,sans-serif", fontSize: "2rem", fontWeight: 800, color: "var(--green)" }}>à¤°à¥{todayEarning}</div>
-            <div style={{ fontSize: "0.7rem", color: "var(--muted)", marginTop: "4px" }}>Week: à¤°à¥{weekEarning} Â· Month: à¤°à¥{earnings?.month || 0}</div>
+            <div style={{ fontFamily: "Syne,sans-serif", fontSize: "2rem", fontWeight: 800, color: "var(--green)" }}>Ã Â¤Â°Ã Â¥Â{todayEarning}</div>
+            <div style={{ fontSize: "0.7rem", color: "var(--muted)", marginTop: "4px" }}>Week: Ã Â¤Â°Ã Â¥Â{weekEarning} ÃÂ· Month: Ã Â¤Â°Ã Â¥Â{earnings?.month || 0}</div>
           </div>
           {earnings?.breakdown && (
             <div className="card">
@@ -911,7 +995,7 @@ function DriverPortal({ user, socket }) {
               {Object.entries(earnings.breakdown).map(([k, v]) => (
                 <div className="row" key={k} style={{ fontSize: "0.78rem", padding: "3px 0" }}>
                   <span style={{ color: "var(--muted)", textTransform: "capitalize" }}>{k}</span>
-                  <span style={{ color: "var(--green)", fontWeight: 600 }}>à¤°à¥{v}</span>
+                  <span style={{ color: "var(--green)", fontWeight: 600 }}>Ã Â¤Â°Ã Â¥Â{v}</span>
                 </div>
               ))}
             </div>
@@ -926,10 +1010,10 @@ function DriverPortal({ user, socket }) {
               <div className="row">
                 <div>
                   <div style={{ fontWeight: 600, fontSize: "0.82rem" }}>{t.restaurant?.name || "Order"}</div>
-                  <div style={{ fontSize: "0.68rem", color: "var(--muted)", marginTop: "2px" }}>{t.customer?.name || ""} Â· {t.distanceKm?.toFixed(1) || "â"} km</div>
+                  <div style={{ fontSize: "0.68rem", color: "var(--muted)", marginTop: "2px" }}>{t.customer?.name || ""} ÃÂ· {t.distanceKm?.toFixed(1) || "Ã¢ÂÂ"} km</div>
                 </div>
                 <div style={{ textAlign: "right" }}>
-                  <div style={{ fontWeight: 700, color: "var(--green)", fontSize: "0.88rem" }}>à¤°à¥{t.driverEarning || t.earn || 0}</div>
+                  <div style={{ fontWeight: 700, color: "var(--green)", fontSize: "0.88rem" }}>Ã Â¤Â°Ã Â¥Â{t.driverEarning || t.earn || 0}</div>
                   <div style={{ fontSize: "0.62rem", color: "var(--muted)" }}>{t.createdAt ? new Date(t.createdAt).toLocaleDateString() : ""}</div>
                 </div>
               </div>
@@ -943,7 +1027,7 @@ function DriverPortal({ user, socket }) {
   );
 }
 
-// âââ Admin Portal âââââââââââââââââââââââââââââââââââââââââââââ
+// Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ Admin Portal Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
 function AdminPortal() {
   const [atab, setAtab]       = useState("overview");
   const [dash, setDash]       = useState(null);
@@ -958,10 +1042,10 @@ function AdminPortal() {
   }, []);
 
   const kpis = [
-    { icon: "ð¦", val: dash?.stats?.todayOrders ?? "â", label: "Orders Today", delta: dash?.stats?.orderGrowth },
-    { icon: "ð°", val: dash?.stats?.todayRevenue ? `à¤°à¥${dash.stats.todayRevenue}` : "â", label: "Revenue Today", delta: dash?.stats?.revenueGrowth },
-    { icon: "ðµ", val: dash?.stats?.activeDrivers ?? "â", label: "Active Drivers", delta: null },
-    { icon: "ðª", val: dash?.stats?.activeRestaurants ?? "â", label: "Restaurants", delta: null },
+    { icon: "Ã°ÂÂÂ¦", val: dash?.stats?.todayOrders ?? "Ã¢ÂÂ", label: "Orders Today", delta: dash?.stats?.orderGrowth },
+    { icon: "Ã°ÂÂÂ°", val: dash?.stats?.todayRevenue ? `Ã Â¤Â°Ã Â¥Â${dash.stats.todayRevenue}` : "Ã¢ÂÂ", label: "Revenue Today", delta: dash?.stats?.revenueGrowth },
+    { icon: "Ã°ÂÂÂµ", val: dash?.stats?.activeDrivers ?? "Ã¢ÂÂ", label: "Active Drivers", delta: null },
+    { icon: "Ã°ÂÂÂª", val: dash?.stats?.activeRestaurants ?? "Ã¢ÂÂ", label: "Restaurants", delta: null },
   ];
 
   const getStatusClass = s => s === "DELIVERED" ? "tag-green" : s === "CANCELLED" ? "tag-red" : s === "ON_THE_WAY" ? "tag-blue" : "tag-yellow";
@@ -989,7 +1073,7 @@ function AdminPortal() {
                 <div className="kpi-label">{k.label}</div>
                 {k.delta != null && (
                   <div className={`kpi-delta ${k.delta >= 0 ? "up" : "down"}`}>
-                    {k.delta >= 0 ? "â²" : "â¼"} {Math.abs(k.delta)}%
+                    {k.delta >= 0 ? "Ã¢ÂÂ²" : "Ã¢ÂÂ¼"} {Math.abs(k.delta)}%
                   </div>
                 )}
               </div>
@@ -1023,8 +1107,8 @@ function AdminPortal() {
                 <span className="order-id">#{o.id?.toString().slice(-4)}</span>
                 <span className={`tag ${getStatusClass(o.status)}`}>{o.status}</span>
               </div>
-              <div className="order-detail">{o.customer?.name || "Customer"} Â· {o.restaurant?.name || "Restaurant"}</div>
-              <div style={{ fontSize: "0.7rem", color: "var(--orange)", marginTop: "3px", fontWeight: 600 }}>à¤°à¥{o.totalAmount}</div>
+              <div className="order-detail">{o.customer?.name || "Customer"} ÃÂ· {o.restaurant?.name || "Restaurant"}</div>
+              <div style={{ fontSize: "0.7rem", color: "var(--orange)", marginTop: "3px", fontWeight: 600 }}>Ã Â¤Â°Ã Â¥Â{o.totalAmount}</div>
             </div>
           ))}
           {orders.length === 0 && <p style={{ color: "var(--muted)", fontSize: "0.8rem" }}>Loading orders...</p>}
@@ -1039,7 +1123,7 @@ function AdminPortal() {
                 <div>
                   <div style={{ fontWeight: 600, fontSize: "0.82rem" }}>{d.user?.name || "Driver"}</div>
                   <div style={{ fontSize: "0.68rem", color: "var(--muted)", marginTop: "2px" }}>
-                    â­ {d.rating?.toFixed(1) || "â"} Â· {d.tripsCount || 0} trips Â· {d.vehicleType}
+                    Ã¢Â­Â {d.rating?.toFixed(1) || "Ã¢ÂÂ"} ÃÂ· {d.tripsCount || 0} trips ÃÂ· {d.vehicleType}
                   </div>
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: "5px", alignItems: "flex-end" }}>
@@ -1064,7 +1148,7 @@ function AdminPortal() {
   );
 }
 
-// âââ Business Portal ââââââââââââââââââââââââââââââââââââââââââ
+// Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ Business Portal Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
 function BusinessPortal({ user }) {
   const [btab, setBtab]       = useState("overview");
   const [partnerData, setPartner] = useState(null);
@@ -1077,16 +1161,16 @@ function BusinessPortal({ user }) {
   }, []);
 
   const kpis = [
-    { val: orders.filter(o => o.status === "DELIVERED").length, label: "Delivered Today", icon: "â" },
-    { val: orders.reduce((s, o) => s + (o.totalAmount || 0), 0), label: "Revenue (à¤°à¥)", icon: "ð°" },
-    { val: orders.filter(o => o.status === "PREPARING" || o.status === "PENDING").length, label: "Active Orders", icon: "ð³" },
-    { val: (orders.reduce((s, o) => s + (o.rating || 0), 0) / (orders.filter(o => o.rating).length || 1)).toFixed(1), label: "Avg Rating", icon: "â­" },
+    { val: orders.filter(o => o.status === "DELIVERED").length, label: "Delivered Today", icon: "Ã¢ÂÂ" },
+    { val: orders.reduce((s, o) => s + (o.totalAmount || 0), 0), label: "Revenue (Ã Â¤Â°Ã Â¥Â)", icon: "Ã°ÂÂÂ°" },
+    { val: orders.filter(o => o.status === "PREPARING" || o.status === "PENDING").length, label: "Active Orders", icon: "Ã°ÂÂÂ³" },
+    { val: (orders.reduce((s, o) => s + (o.rating || 0), 0) / (orders.filter(o => o.rating).length || 1)).toFixed(1), label: "Avg Rating", icon: "Ã¢Â­Â" },
   ];
 
   return (
     <div className="biz-wrap">
       <div className="biz-header">
-        <div className="biz-logo">ðªï¸ TooFan Business</div>
+        <div className="biz-logo">Ã°ÂÂÂªÃ¯Â¸Â TooFan Business</div>
         <div style={{ fontSize: "0.75rem", color: "#888" }}>{partnerData?.restaurant?.name || user.name}</div>
       </div>
 
@@ -1115,11 +1199,11 @@ function BusinessPortal({ user }) {
           {orders.map(o => (
             <div className="biz-card" key={o.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <div>
-                <div style={{ fontWeight: 600, fontSize: "0.82rem" }}>#{o.id?.toString().slice(-4)} Â· {o.customer?.name || "Customer"}</div>
+                <div style={{ fontWeight: 600, fontSize: "0.82rem" }}>#{o.id?.toString().slice(-4)} ÃÂ· {o.customer?.name || "Customer"}</div>
                 <div style={{ fontSize: "0.68rem", color: "#888", marginTop: "2px" }}>{o.items?.map(i => i.menuItem?.name).join(", ")}</div>
               </div>
               <div style={{ textAlign: "right" }}>
-                <div style={{ fontWeight: 700, color: "#E63946" }}>à¤°à¥{o.totalAmount}</div>
+                <div style={{ fontWeight: 700, color: "#E63946" }}>Ã Â¤Â°Ã Â¥Â{o.totalAmount}</div>
                 <div style={{ fontSize: "0.65rem", color: o.status === "DELIVERED" ? "#22c55e" : "#F59E0B", marginTop: "2px" }}>{o.status}</div>
               </div>
             </div>
@@ -1132,7 +1216,7 @@ function BusinessPortal({ user }) {
   );
 }
 
-// âââ Dev Portal âââââââââââââââââââââââââââââââââââââââââââââââ
+// Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ Dev Portal Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
 function DevPortalComponent() {
   const [page, setPage]         = useState("config");
   const [config, setConfig]     = useState(null);
@@ -1165,14 +1249,14 @@ function DevPortalComponent() {
   };
 
   const NAV = [
-    { section: "PLATFORM", items: [{ id: "config", icon: "âï¸", label: "App Config" }, { id: "surge", icon: "â¡", label: "Surge Zones" }] },
-    { section: "DATA", items: [{ id: "restaurants", icon: "ðª", label: "Restaurants" }, { id: "drivers", icon: "ðµ", label: "Drivers" }] },
+    { section: "PLATFORM", items: [{ id: "config", icon: "Ã¢ÂÂÃ¯Â¸Â", label: "App Config" }, { id: "surge", icon: "Ã¢ÂÂ¡", label: "Surge Zones" }] },
+    { section: "DATA", items: [{ id: "restaurants", icon: "Ã°ÂÂÂª", label: "Restaurants" }, { id: "drivers", icon: "Ã°ÂÂÂµ", label: "Drivers" }] },
   ];
 
   return (
     <div className="dev-wrap">
       <div className="dev-sidebar">
-        <div className="dev-logo">ðªï¸ TooFan Dev</div>
+        <div className="dev-logo">Ã°ÂÂÂªÃ¯Â¸Â TooFan Dev</div>
         {NAV.map(n => (
           <div key={n.section}>
             <div className="dev-section">{n.section}</div>
@@ -1244,8 +1328,8 @@ function DevPortalComponent() {
               <div className="card" key={r.id}>
                 <div className="row">
                   <div>
-                    <div style={{ fontWeight: 600, fontSize: "0.82rem" }}>{r.imageUrl || "ð½ï¸"} {r.name}</div>
-                    <div style={{ fontSize: "0.68rem", color: "var(--muted)", marginTop: "2px" }}>{r.cuisineType || r.cuisine} Â· â­ {r.rating}</div>
+                    <div style={{ fontWeight: 600, fontSize: "0.82rem" }}>{r.imageUrl || "Ã°ÂÂÂ½Ã¯Â¸Â"} {r.name}</div>
+                    <div style={{ fontSize: "0.68rem", color: "var(--muted)", marginTop: "2px" }}>{r.cuisineType || r.cuisine} ÃÂ· Ã¢Â­Â {r.rating}</div>
                   </div>
                   <span className={`tag ${r.isOpen !== false ? "tag-green" : "tag-red"}`}>{r.isOpen !== false ? "Open" : "Closed"}</span>
                 </div>
@@ -1263,7 +1347,7 @@ function DevPortalComponent() {
                   <div>
                     <div style={{ fontWeight: 600, fontSize: "0.82rem" }}>{d.user?.name}</div>
                     <div style={{ fontSize: "0.68rem", color: "var(--muted)", marginTop: "2px" }}>
-                      {d.vehicleType} Â· â­ {d.rating?.toFixed(1)} Â· {d.tripsCount} trips
+                      {d.vehicleType} ÃÂ· Ã¢Â­Â {d.rating?.toFixed(1)} ÃÂ· {d.tripsCount} trips
                     </div>
                   </div>
                   <span className={`tag ${d.isApproved ? "tag-green" : "tag-yellow"}`}>{d.isApproved ? "Active" : "Pending"}</span>
@@ -1278,7 +1362,7 @@ function DevPortalComponent() {
   );
 }
 
-// âââ Root App âââââââââââââââââââââââââââââââââââââââââââââââââ
+// Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ Root App Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
 export default function App() {
   const [user, setUser]       = useState(null);
   const [loading, setLoading] = useState(true);
@@ -1346,11 +1430,11 @@ export default function App() {
 
   // Build portal tabs based on role
   const tabs = [];
-  if (!isDriver && !isBiz) tabs.push({ id: "main", label: "ðªï¸ Khana" });
-  if (isDriver)             tabs.push({ id: "driver", label: "ðµ Driver" });
-  if (isBiz || isAdmin)     tabs.push({ id: "business", label: "ðª Business" });
-  if (isAdmin)              tabs.push({ id: "admin", label: "ð Admin" });
-  if (isAdmin)              tabs.push({ id: "dev", label: "âï¸ Dev" });
+  if (!isDriver && !isBiz) tabs.push({ id: "main", label: "Ã°ÂÂÂªÃ¯Â¸Â Khana" });
+  if (isDriver)             tabs.push({ id: "driver", label: "Ã°ÂÂÂµ Driver" });
+  if (isBiz || isAdmin)     tabs.push({ id: "business", label: "Ã°ÂÂÂª Business" });
+  if (isAdmin)              tabs.push({ id: "admin", label: "Ã°ÂÂÂ Admin" });
+  if (isAdmin)              tabs.push({ id: "dev", label: "Ã¢ÂÂÃ¯Â¸Â Dev" });
 
   return (
     <>
@@ -1377,4 +1461,5 @@ export default function App() {
     </>
   );
 }
+
 
