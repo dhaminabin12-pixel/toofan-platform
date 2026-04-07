@@ -1,10 +1,10 @@
-// ─────────────────────────────────────────────────────────────
-//  Auth Routes  —  /api/v1/auth
-// ─────────────────────────────────────────────────────────────
+// ──────────────────────────────────────────────────────────────
+// Auth Routes — /api/v1/auth
+// ──────────────────────────────────────────────────────────────
 
-const router     = require("express").Router();
-const { body }   = require("express-validator");
-const controller = require("../controllers/auth.controller");
+const router      = require("express").Router();
+const { body }    = require("express-validator");
+const controller  = require("../controllers/auth.controller");
 const { validate } = require("../middleware/validate.middleware");
 const { authenticate } = require("../middleware/auth.middleware");
 
@@ -32,18 +32,37 @@ router.post("/login",
 );
 
 // POST /auth/send-otp
+// Accepts: { identifier: "phone_or_email", purpose?: "verify_phone"|"reset_password"|"login" }
 router.post("/send-otp",
-  [body("phone").notEmpty()],
+  [
+    body("identifier")
+      .notEmpty().withMessage("Phone number or email is required")
+      .custom((v) => {
+        const isEmail = v.includes("@");
+        const isPhone = /^[9][6-9]\d{8}$/.test(v);
+        if (!isEmail && !isPhone) throw new Error("Must be a valid Nepali phone number or email address");
+        return true;
+      }),
+    body("purpose")
+      .optional()
+      .isIn(["verify_phone","reset_password","login"])
+      .withMessage("Invalid OTP purpose"),
+  ],
   validate,
   controller.sendOtp
 );
 
 // POST /auth/verify-otp
+// Accepts: { identifier: "phone_or_email", code: "123456", purpose: "..." }
 router.post("/verify-otp",
   [
-    body("phone").notEmpty(),
-    body("code").isLength({ min: 6, max: 6 }).withMessage("6-digit OTP required"),
-    body("purpose").isIn(["verify_phone","reset_password","login"]),
+    body("identifier")
+      .notEmpty().withMessage("Phone number or email is required"),
+    body("code")
+      .isLength({ min: 6, max: 6 }).withMessage("6-digit OTP required"),
+    body("purpose")
+      .isIn(["verify_phone","reset_password","login"])
+      .withMessage("Invalid OTP purpose"),
   ],
   validate,
   controller.verifyOtp
@@ -60,11 +79,12 @@ router.post("/refresh-token",
 router.post("/logout", authenticate, controller.logout);
 
 // POST /auth/reset-password
+// Accepts: { identifier, otp, newPassword }
 router.post("/reset-password",
   [
-    body("phone").notEmpty(),
-    body("otp").notEmpty(),
-    body("newPassword").isLength({ min: 6 }),
+    body("identifier").notEmpty().withMessage("Phone or email is required"),
+    body("otp").isLength({ min: 6, max: 6 }).withMessage("6-digit OTP required"),
+    body("newPassword").isLength({ min: 6 }).withMessage("Password min 6 chars"),
   ],
   validate,
   controller.resetPassword
@@ -73,12 +93,7 @@ router.post("/reset-password",
 // GET /auth/me
 router.get("/me", authenticate, controller.getMe);
 
-// PATCH /auth/fcm-token  (update Firebase push token)
-router.patch("/fcm-token",
-  authenticate,
-  [body("fcmToken").notEmpty()],
-  validate,
-  controller.updateFcmToken
-);
+// PATCH /auth/fcm-token
+router.patch("/fcm-token", authenticate, controller.updateFcmToken);
 
 module.exports = router;
