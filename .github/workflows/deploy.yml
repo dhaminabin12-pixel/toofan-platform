@@ -33,6 +33,8 @@ jobs:
           script: |
             set -e
 
+            # Fix git safe directory issue
+            git config --global --add safe.directory /home/ec2-user/toofan-platform
             # Pull latest code
             cd /home/ec2-user/toofan-platform
             git pull origin main
