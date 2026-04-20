@@ -47,7 +47,11 @@ jobs:
             npx prisma generate
             npx prisma db push --skip-generate
 
+            # Kill any orphan processes on port 5000 before restart
+            sudo fuser -k 5000/tcp 2>/dev/null || true
+            sleep 2
+
             # Restart backend with PM2
             pm2 restart toofan-backend || pm2 start src/index.js --name toofan-backend
-
+            pm2 save
             echo "Deployment complete!"
