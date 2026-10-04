@@ -8,7 +8,7 @@ import {
   Auth, Restaurants, Orders, Drivers, Payments,
   Coupons, Notifications, Admin, Partners, Config,
   setAuth, clearAuth, getUser, isLoggedIn,
-} from "./api.js";
+} from "./api";
 import {
   connectSocket, disconnectSocket, getSocket,
   driverGoOnline, driverGoOffline, driverLocationUpdate,
@@ -17,7 +17,7 @@ import {
   customerTrackOrder,
   onOrderStatusChanged, onDriverAssigned, onDriverLocation,
   onChatMessage,
-} from "./socket.js";
+} from "./socket";
 
 // Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ Global style injection Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
 const GLOBAL_CSS = `
