@@ -1,4 +1,20 @@
+# Secrets
 .env
 *.pem
 *firebase*adminsdk*.json
-node_modules
+
+# Dependencies and build output
+node_modules/
+dist/
+
+# Local tooling
+.claude/settings.local.json
+
+# Duplicate downloads, installers and archives
+* (1).*
+* (2).*
+* (3).*
+* (4).*
+*.msi
+*.exe
+*.zip

@@ -20,7 +20,7 @@ services:
 
   # ── Backend API ─────────────────────────────
   toofan-backend:
-    image: 041808556268.dkr.ecr.us-east-1.amazonaws.com/toofan-backend:latest
+    image: ${ECR_REGISTRY:-local}/toofan-backend:latest
     build:
       context: ./toofan-backend
       dockerfile: Dockerfile
@@ -75,7 +75,7 @@ services:
 
   # ── Frontend ────────────────────────────────
   toofan-frontend:
-    image: 041808556268.dkr.ecr.us-east-1.amazonaws.com/toofan-frontend:latest
+    image: ${ECR_REGISTRY:-local}/toofan-frontend:latest
     build:
       context: ./toofan-frontend
       dockerfile: Dockerfile

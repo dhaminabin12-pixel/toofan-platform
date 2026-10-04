@@ -1,160 +1,97 @@
-# TooFan Platform — AWS Deployment Guide
+# TooFan — Deployment Guide
 
-## Provisioned Resources (already created)
+> Real values (AWS account ID, instance ID, IP addresses, key-pair file, CLI profile)
+> are deliberately **not** in this repo. Keep them in your password manager or in
+> GitHub → Settings → Secrets. Placeholders below are written as `<LIKE_THIS>`.
 
-| Resource | Value |
-|----------|-------|
-| AWS Account | 041808556268 |
-| AWS Profile | aws-manish |
-| Region | us-east-1 |
-| EC2 Instance | i-00fb40b770d87cd42 |
-| EC2 Public IP | **52.90.193.185** |
-| EC2 Key Pair | `toofan-keypair.pem` (in project root) |
-| Security Group | sg-0963d52bd45779c08 |
-| S3 Bucket | toofan-uploads-041808556268 |
-| ECR Backend | 041808556268.dkr.ecr.us-east-1.amazonaws.com/toofan-backend |
-| ECR Frontend | 041808556268.dkr.ecr.us-east-1.amazonaws.com/toofan-frontend |
-| IAM OIDC Role | arn:aws:iam::041808556268:role/GitHubActionsRole |
-
-## Architecture
+## How it's deployed
 
 ```
-Internet
-   │
-   ▼
-EC2 52.90.193.185 (t3.small, us-east-1)
-   ├── toofan-frontend  (nginx:80)   ◄── serves React SPA, proxies /api & /socket.io
-   ├── toofan-backend   (node:5000)  ◄── Express + Socket.IO API
-   └── postgres         (pg:5432)    ◄── PostgreSQL database
-
-S3: toofan-uploads-041808556268  ◄── driver/restaurant image uploads
-ECR: 041808556268.dkr.ecr.us-east-1.amazonaws.com  ◄── Docker image registry
+                ┌──────────────────────────┐
+Browser ──────▶ │ Vercel (toofan-frontend) │  React SPA
+                └────────────┬─────────────┘
+                             │ rewrites /api, /socket.io, /uploads
+                             ▼
+                ┌──────────────────────────┐
+                │ AWS EC2 (us-east-1)      │
+                │  ├─ toofan-backend (PM2) │  Express + Socket.IO, port 5000
+                │  └─ PostgreSQL           │  via Prisma
+                └────────────┬─────────────┘
+                             ▼
+                      S3: uploads bucket      driver / restaurant images
 ```
 
----
+- **Frontend** — Vercel builds `toofan-frontend/` on every push to `main`.
+  API, socket and upload traffic is proxied to the backend by `toofan-frontend/vercel.json`.
+- **Backend** — `.github/workflows/deploy.yml` SSHes into EC2 on every push to `main`,
+  pulls, runs `npm install`, `prisma db push`, and restarts the `toofan-backend` PM2 process.
 
-## Step 1 — Configure environment variables
+## Resources
+
+| Resource | Where to find the value |
+|----------|-------------------------|
+| AWS account ID | `aws sts get-caller-identity` |
+| Region | `us-east-1` |
+| EC2 instance / public IP | AWS console → EC2, or the `EC2_HOST` GitHub secret |
+| SSH key pair | `<KEY_PAIR>.pem` — stored outside the repo (`*.pem` is git-ignored) |
+| S3 uploads bucket | `toofan-uploads-<ACCOUNT_ID>` (created by `scripts/aws-setup.sh`) |
+
+## 1. Provision AWS (once)
 
 ```bash
-cp .env.production.example .env
-# Edit .env and fill in ALL values
+AWS_PROFILE=<your-profile> ./scripts/aws-setup.sh
 ```
 
-Generate JWT secrets:
+This creates the S3 bucket, security group, key pair and EC2 instance, and prints the public IP.
+
+## 2. Configure environment variables
+
 ```bash
-node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
-# Run twice — once for JWT_SECRET, once for JWT_REFRESH_SECRET
+cp .env.production.example .env   # fill in every value; .env is git-ignored
+node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"  # run twice: JWT_SECRET, JWT_REFRESH_SECRET
 ```
 
-Make sure to set in `.env`:
+Copy it to the server:
+
+```bash
+scp -i <KEY_PAIR>.pem .env ec2-user@<EC2_HOST>:~/toofan-platform/toofan-backend/.env
 ```
-AWS_S3_BUCKET=toofan-uploads-041808556268
-AWS_REGION=us-east-1
-UPLOAD_DRIVER=s3
-```
 
----
+## 3. GitHub secrets
 
-## Step 2 — Add GitHub Secret (one secret only)
-
-Since CI/CD uses OIDC (no static keys needed), you only need to add **2 secrets**:
-
-In your GitHub repo → **Settings → Secrets → Actions**:
+Repo → **Settings → Secrets and variables → Actions**:
 
 | Secret | Value |
 |--------|-------|
-| `EC2_HOST` | `52.90.193.185` |
-| `EC2_SSH_KEY` | Full contents of `toofan-keypair.pem` |
+| `EC2_HOST` | EC2 public IP or hostname |
+| `EC2_SSH_KEY` | Full contents of `<KEY_PAIR>.pem` |
 
----
+## 4. Deploy
 
-## Step 3 — Copy docker-compose.yml and .env to EC2
+Push to `main`. GitHub Actions deploys the backend; Vercel deploys the frontend.
 
-```bash
-scp -i toofan-keypair.pem docker-compose.yml ec2-user@52.90.193.185:~/toofan-platform/
-scp -i toofan-keypair.pem .env              ec2-user@52.90.193.185:~/toofan-platform/
-```
-
----
-
-## Step 4 — First deployment
-
-Push to the `main` branch to trigger GitHub Actions:
+## 5. Seed the database (first time only)
 
 ```bash
-git add .
-git commit -m "add AWS deployment config"
-git push origin main
+ssh -i <KEY_PAIR>.pem ec2-user@<EC2_HOST>
+cd ~/toofan-platform/toofan-backend
+node prisma/seed.js
 ```
 
-GitHub Actions will:
-1. Build backend and frontend Docker images
-2. Push to ECR
-3. SSH into EC2 and run `docker compose up`
-4. Run Prisma migrations automatically
-
----
-
-## Step 5 — Seed the database (first time only)
+## Useful commands on the server
 
 ```bash
-ssh -i toofan-keypair.pem ec2-user@52.90.193.185
-cd ~/toofan-platform
-docker compose exec toofan-backend node prisma/seed.js
+pm2 status
+pm2 logs toofan-backend
+pm2 restart toofan-backend
+npx prisma studio            # then tunnel: ssh -L 5555:localhost:5555 ...
 ```
 
----
+## HTTPS / custom domain
 
-## Useful commands on the EC2 instance
+1. Point the domain's A record at the EC2 public IP.
+2. `sudo yum install -y certbot && sudo certbot certonly --standalone -d <your-domain>`
+3. Put nginx (or a load balancer) in front of port 5000 and update `vercel.json` to use `https://<your-domain>`.
 
-```bash
-# View running containers
-docker compose ps
-
-# View backend logs
-docker compose logs -f toofan-backend
-
-# View frontend logs
-docker compose logs -f toofan-frontend
-
-# Restart a service
-docker compose restart toofan-backend
-
-# Open Prisma Studio (then SSH tunnel to access locally)
-docker compose exec toofan-backend npx prisma studio
-```
-
----
-
-## HTTPS / Custom Domain (optional)
-
-To add SSL with a custom domain:
-
-1. Point your domain's A record to the EC2 public IP
-2. SSH into EC2 and install Certbot:
-   ```bash
-   sudo yum install -y certbot
-   sudo certbot certonly --standalone -d yourdomain.com
-   ```
-3. Update `toofan-frontend/nginx.conf` to redirect HTTP to HTTPS and serve the cert.
-
----
-
-## Cost estimate (ap-south-1 Mumbai)
-
-| Resource | Cost |
-|----------|------|
-| EC2 t3.small | ~$15/month |
-| S3 (first 50GB) | ~$1/month |
-| ECR (first 500MB) | Free |
-| Data transfer | ~$1–5/month |
-| **Total** | **~$17–21/month** |
-
----
-
-## IAM Permissions required for deployment
-
-The IAM user needs these policies:
-- `AmazonEC2ContainerRegistryFullAccess`
-- `AmazonS3FullAccess` (or scoped to your bucket)
-- `AmazonEC2FullAccess` (only for initial setup, can restrict after)
+> `docker-compose.yml` and the Dockerfiles are kept for running the whole stack locally
+> or for a future container-based deploy; production currently uses PM2.
