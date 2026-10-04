@@ -9,12 +9,13 @@ set -e
 
 # ── CONFIG — edit these ────────────────────────────────────────
 APP_NAME="toofan"
-AWS_PROFILE="aws-manish"
+AWS_PROFILE="${AWS_PROFILE:-default}"          # your local AWS CLI profile
 AWS_REGION="us-east-1"
 EC2_INSTANCE_TYPE="t3.small"     # 2 vCPU, 2GB RAM — upgrade if needed
 EC2_AMI="ami-0c02fb55189d77ca5"  # Amazon Linux 2023 (us-east-1)
 KEY_PAIR_NAME="toofan-keypair"
-S3_BUCKET="toofan-uploads-041808556268"
+ACCOUNT_ID="$(aws sts get-caller-identity --query Account --output text --profile $AWS_PROFILE)"
+S3_BUCKET="${S3_BUCKET:-toofan-uploads-$ACCOUNT_ID}"
 
 echo "==> Creating ECR repositories..."
 aws ecr create-repository --repository-name toofan-backend  --region $AWS_REGION --profile $AWS_PROFILE || true
